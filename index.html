@@ -148,15 +148,93 @@
             background-color: #a9a9a9;
         }
     </style>
-        
-    <script>
-        $(document).ready(() => {
-             
-        });
-    </script>
 </head>
 <body>
-    <div id="welcome" class="onscreen popup">
+    <script>
+        $(document).ready(() => {
+            // get the json object from a NON-LOCAL url
+            $.get("https://rockyboo3.github.io/Portfolio/popup_info.json", (data) => {
+                // loop through each product
+                data["popups"].forEach(popup => {
+                    $('body').append(
+                        '<div style="display:none;" class="onscreen popup id="' + popup["name"] + '">' +
+                            '<div class="popup_banner_header">' +
+                                popup["name"] +
+                                '<div class="x_button_wrapper">' +
+                                    '<div class="x_text">x</div>' +
+                                '</div>' +
+                            '</div>' +
+                            '<h1>' + popup["header"] + '</h1>' +
+                            '<div class="info_container">' +
+                                '<img class="popup_icon" src="images/' + popup["icon"] + '_icon.png"/>' +
+                                '<div class="right_content">' +
+                                    popup["content"] +
+                                '</div>' +
+                            '</div>' +
+                        '</div>');
+                });
+            }).then(() => {
+                // CREATE DESKTOP ICONS
+                let icons = ["computer_icon", "folder_icon", "folder_icon", "folder_icon", "contact_icon"];
+                let icon_names = ["Cait's Computer", "Experience", "Projects", "Skills", "Contact"];
+                let desktopContainer = document.createElement('div');
+                document.body.insertBefore(desktopContainer, document.getElementById('footer'));
+
+                icons.forEach((element, index) => {
+                    const iconDiv = document.createElement('div');
+                    iconDiv.classList.add('desktop_icon');
+                    iconDiv.id = icon_names[index];
+                    iconDiv.innerHTML = `<img src='images/${element}.png'/><br>${icon_names[index]}`;
+                    desktopContainer.appendChild(iconDiv);
+
+                    var hammer = new Hammer.Manager(iconDiv);
+                    hammer.add(new Hammer.Tap({ event: 'doubletap', taps: 2 }));
+                    hammer.on("doubletap", function(ev) {
+                        openPopup(icon_names[index]);
+                    });
+                });
+
+                // OPEN A NEW POPUP
+                function openPopup(element_id) {
+                    document.getElementById(element_id).style.display = "block";
+                }
+
+                // CREATE DRAGGABLE FUNCTIONALITY FOR POPUPS
+                // const container = document.getElementById("drag_test");
+                // const hammer = new Hammer(container);
+
+                let popUpElements = document.querySelectorAll('.onscreen');
+                popUpElements.forEach(element => {
+                    const hammer = new Hammer(element);
+                    hammer.get('pan').set({enable: true});
+
+                    let initialX, initialY = 0;
+
+                    hammer.on('panstart', (event) => {
+                        initialX = element.offsetLeft;
+                        initialY = element.offsetTop;
+                    });
+
+                    hammer.on('pan', (event) => {
+                        const deltaX = event.deltaX;
+                        const deltaY = event.deltaY;
+
+                        element.style.left = initialX + deltaX + 'px';
+                        element.style.top = initialY + deltaY + 'px';
+                    });
+                });
+
+                // ADD CLOSING FUNCTIONALITY TO POPUPS
+                let closeElements = document.querySelectorAll('.x_button_wrapper');
+                closeElements.forEach(element => {
+                    element.addEventListener("click", () => {
+                        element.parentElement.parentElement.style.display = 'none';
+                    });
+                });
+            });
+        });
+    </script>
+    <!-- <div id="welcome" class="onscreen popup">
         <div class="popup_banner_header">
             Welcome
             <div class="x_button_wrapper">
@@ -186,7 +264,7 @@
                 Thanks for stopping by! :-)
             </div>
         </div>
-    </div>
+    </div> -->
 
     <div id="footer">
         <div class="footer_boxes">
@@ -199,63 +277,63 @@
         </div>
     </div>
     <script>
-        // CREATE DESKTOP ICONS
-        let icons = ["computer_icon", "folder_icon", "folder_icon", "folder_icon", "contact_icon"];
-        let icon_names = ["Cait's Computer", "Experience", "Projects", "Skills", "Contact"];
-        let desktopContainer = document.createElement('div');
-        document.body.insertBefore(desktopContainer, document.getElementById('footer'));
+        // // CREATE DESKTOP ICONS
+        // let icons = ["computer_icon", "folder_icon", "folder_icon", "folder_icon", "contact_icon"];
+        // let icon_names = ["Cait's Computer", "Experience", "Projects", "Skills", "Contact"];
+        // let desktopContainer = document.createElement('div');
+        // document.body.insertBefore(desktopContainer, document.getElementById('footer'));
 
-        icons.forEach((element, index) => {
-            const iconDiv = document.createElement('div');
-            iconDiv.classList.add('desktop_icon');
-            iconDiv.id = icon_names[index];
-            iconDiv.innerHTML = `<img src='images/${element}.png'/><br>${icon_names[index]}`;
-            desktopContainer.appendChild(iconDiv);
+        // icons.forEach((element, index) => {
+        //     const iconDiv = document.createElement('div');
+        //     iconDiv.classList.add('desktop_icon');
+        //     iconDiv.id = icon_names[index];
+        //     iconDiv.innerHTML = `<img src='images/${element}.png'/><br>${icon_names[index]}`;
+        //     desktopContainer.appendChild(iconDiv);
 
-            var hammer = new Hammer.Manager(iconDiv);
-            hammer.add(new Hammer.Tap({ event: 'doubletap', taps: 2 }));
-            hammer.on("doubletap", function(ev) {
-                openPopup(index);
-            });
-        });
+        //     var hammer = new Hammer.Manager(iconDiv);
+        //     hammer.add(new Hammer.Tap({ event: 'doubletap', taps: 2 }));
+        //     hammer.on("doubletap", function(ev) {
+        //         openPopup(index);
+        //     });
+        // });
 
-        // OPEN A NEW POPUP
-        function openPopup(element_index) {
-            alert(element_index);
-        }
+        // // OPEN A NEW POPUP
+        // function openPopup(element_index) {
+        //     alert(element_index);
+        // }
 
-        // CREATE DRAGGABLE FUNCTIONALITY FOR POPUPS
-        // const container = document.getElementById("drag_test");
-        // const hammer = new Hammer(container);
+        // // CREATE DRAGGABLE FUNCTIONALITY FOR POPUPS
+        // // const container = document.getElementById("drag_test");
+        // // const hammer = new Hammer(container);
 
-        let popUpElements = document.querySelectorAll('.onscreen');
-        popUpElements.forEach(element => {
-            const hammer = new Hammer(element);
-            hammer.get('pan').set({enable: true});
+        // let popUpElements = document.querySelectorAll('.onscreen');
+        // popUpElements.forEach(element => {
+        //     const hammer = new Hammer(element);
+        //     hammer.get('pan').set({enable: true});
 
-            let initialX, initialY = 0;
+        //     let initialX, initialY = 0;
 
-            hammer.on('panstart', (event) => {
-                initialX = element.offsetLeft;
-                initialY = element.offsetTop;
-            });
+        //     hammer.on('panstart', (event) => {
+        //         initialX = element.offsetLeft;
+        //         initialY = element.offsetTop;
+        //     });
 
-            hammer.on('pan', (event) => {
-                const deltaX = event.deltaX;
-                const deltaY = event.deltaY;
+        //     hammer.on('pan', (event) => {
+        //         const deltaX = event.deltaX;
+        //         const deltaY = event.deltaY;
 
-                element.style.left = initialX + deltaX + 'px';
-                element.style.top = initialY + deltaY + 'px';
-            });
-        });
+        //         element.style.left = initialX + deltaX + 'px';
+        //         element.style.top = initialY + deltaY + 'px';
+        //     });
+        // });
 
-        // ADD CLOSING FUNCTIONALITY TO POPUPS
-        let closeElements = document.querySelectorAll('.x_button_wrapper');
-        closeElements.forEach(element => {
-            element.addEventListener("click", () => {
-                element.parentElement.parentElement.style.display = 'none';
-            });
-        });
+        // // ADD CLOSING FUNCTIONALITY TO POPUPS
+        // let closeElements = document.querySelectorAll('.x_button_wrapper');
+        // closeElements.forEach(element => {
+        //     element.addEventListener("click", () => {
+        //         element.parentElement.parentElement.style.display = 'none';
+        //     });
+        // });
 
     </script>
 </body>
