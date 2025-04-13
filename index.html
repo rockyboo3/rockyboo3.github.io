@@ -154,7 +154,10 @@
     <script>
         // variable that will ensure newly opened popups are always on top of previous ones
         // initial value chosen arbitrarily
-        var zIndexPriority = 4;
+        var zIndexPriority = 3;
+
+        // represents the initial number of popups on the screen
+        var elementsOnScreen = 1;
 
         $(document).ready(() => {
             // get the json object from a NON-LOCAL url
@@ -182,6 +185,9 @@
                 // doing everything else after .then will ensure we have access to the necessary id's and 
                 // classes later
             }).then(() => {
+                // when the webpage is first loaded, users are always greeted w/ the welcome screen
+                document.getElementById("Cait's Computer").style.display = "block";
+
                 // CREATE DESKTOP ICONS
                 let icons = ["computer_icon", "folder_icon", "folder_icon", "folder_icon", "contact_icon"];
                 let icon_names = ["Cait's Computer", "Experience", "Projects", "Skills", "Contact"];
@@ -210,16 +216,26 @@
                 // OPEN A NEW POPUP
                 function openPopup(element_id) {
                     let elt = document.getElementById(element_id);
-                    elt.style.display = "block";
 
-                    // reset position to be middle of screen
-                    elt.style.top = "50%";
-                    elt.style.left = "50%";
-                    elt.style.transform = "translate(-50%, -50%)";
-                    elt.style.zIndex = zIndexPriority++;
+                    // only open the popup if it isn't already on the screen
+                    if (elt.style.display != "block") {
+                        elt.style.display = "block";
 
-                    // ensures z-index of footer will always be greater
-                    document.getElementById("footer").style.zIndex = zIndexPriority++;
+                        // reset position to be middle of screen
+                        elt.style.top = "50%";
+                        elt.style.left = "50%";
+
+                        // shifts new popups from center position dependent on how many 
+                        // popups are currently on the screen
+                        let shift = 50 - elementsOnScreen*6;
+                        elementsOnScreen++;
+
+                        elt.style.transform = `translate(-${shift}%, -${shift}%)`
+                        elt.style.zIndex = zIndexPriority++;
+
+                        // ensures z-index of footer will always be greater
+                        document.getElementById("footer").style.zIndex = zIndexPriority++;
+                    }
                 }
 
                 // give all popups touch movements
@@ -241,6 +257,9 @@
 
                         element.style.left = initialX + deltaX + 'px';
                         element.style.top = initialY + deltaY + 'px';
+
+                        // move the currently clicked popup to the top
+                        element.style.zIndex = zIndexPriority++;
                     });
                 });
 
@@ -249,6 +268,7 @@
                 closeElements.forEach(element => {
                     element.addEventListener("click", () => {
                         element.parentElement.parentElement.style.display = 'none';
+                        elementsOnScreen--;
                     });
                 });
             });
