@@ -24,6 +24,7 @@
             width: 78px;
             padding: 4px 2px;
             border-radius: 4px;
+            user-select: none;
         }
 
         .desktop_icon:hover {
@@ -135,7 +136,11 @@
             border-top: 2px solid #ededed;
             border-left: 2px solid #ededed;
             border-bottom: 2px solid #404040;
-            border-right: 2px solid #404040;
+            border-right: 2px solid #404040;   
+        }
+
+        #footer #git a {
+            text-decoration: none;
         }
 
         #footer #git:hover {
@@ -164,7 +169,7 @@
         <div class="info_container">
             <img class="popup_icon" src="images/star_icon.png"/>
             <div class="right_content">
-                <strong style="font-size: 12px;">Hi! I'm Caitlyn Parrish-Lewis...</strong>
+                <strong style='font-size: 12px;'>Hi! I'm Caitlyn Parrish-Lewis...</strong>
                 <br><br>
                 I am a sophomore Computer Science and Engineering 
                 Psychology student at Tufts University.
@@ -188,20 +193,36 @@
             Made by Caitlyn Parrish-Lewis
         </div>
         <div class="footer_boxes" id="git">
-            View this project on GitHub
+            <a href="https://github.com/rockyboo3/Portfolio">
+                View this project on GitHub
+            </a>
         </div>
     </div>
     <script>
         // CREATE DESKTOP ICONS
         let icons = ["computer_icon", "folder_icon", "folder_icon", "folder_icon", "contact_icon"];
-        let icon_names = ["Cait's<br>Computer", "Experience", "Projects", "Skills", "Contact"];
+        let icon_names = ["Cait's Computer", "Experience", "Projects", "Skills", "Contact"];
+        let desktopContainer = document.createElement('div');
+        document.body.insertBefore(desktopContainer, document.getElementById('footer'));
 
-        icons.forEach(function(element, index) {
-            document.write("<div class='desktop_icon id='" + element + "'>");
-            document.write("<img src='images/" + element  + ".png'/><br>");
-            document.write(icon_names[index]);
-            document.write("</div>");
+        icons.forEach((element, index) => {
+            const iconDiv = document.createElement('div');
+            iconDiv.classList.add('desktop_icon');
+            iconDiv.id = icon_names[index];
+            iconDiv.innerHTML = `<img src='images/${element}.png'/><br>${icon_names[index]}`;
+            desktopContainer.appendChild(iconDiv);
+
+            var hammer = new Hammer.Manager(iconDiv);
+            hammer.add(new Hammer.Tap({ event: 'doubletap', taps: 2 }));
+            hammer.on("doubletap", function(ev) {
+                openPopup(index);
+            });
         });
+
+        // OPEN A NEW POPUP
+        function openPopup(element_index) {
+            alert(element_index);
+        }
 
         // CREATE DRAGGABLE FUNCTIONALITY FOR POPUPS
         // const container = document.getElementById("drag_test");
