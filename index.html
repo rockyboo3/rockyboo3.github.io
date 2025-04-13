@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Caitlyn Parrish-Lewis | Portfolio</title>
+    <meta name='viewport' content="width=device-width, initial-scale=1">
+    <link href="https://fonts.cdnfonts.com/css/px-sans-nouveaux" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Serif+Text:ital@0;1&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js"></script>
+
+    <style type="text/css">
+        body, html {
+            margin: 0;
+            background-color: teal;
+            font-family: 'px sans nouveaux', sans-serif;
+            font-size: 10px;
+        }
+
+        .desktop_icon {
+            color: white;
+            width: fit-content;
+            text-align: center;
+            margin: 14px 0px 14px 2px;
+            width: 78px;
+            padding: 4px 2px;
+            border-radius: 4px;
+        }
+
+        .desktop_icon:hover {
+            cursor: pointer;
+            background-color: rgb(4, 162, 162);
+        }
+
+        .desktop_icon img {
+            width: 42px;
+        }
+
+        .popup {
+            position: fixed;
+            cursor: grab;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 700px;
+            height: fit-content;
+            background-color: #b6b6b6;
+            border-top: 2px solid #efefef;
+            border-left: 2px solid #efefef;
+            border-right: 2px solid #000;
+            border-bottom: 2px solid #000;
+        }
+
+        .popup_banner_header {
+            color: white;
+            height: fit-content;
+            background-color: navy;
+            padding: 4px;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+        }
+
+        .x_button_wrapper {
+            width: 14px;
+            height: 14px;
+            color: black;
+            text-align: center;
+            background-color: #b6b6b6;
+            border-left: 2px solid #ededed;
+            border-top: 2px solid #ededed;
+            border-right: 2px solid #404040;
+            border-bottom: 2px solid #404040;
+        }
+
+        .x_button_wrapper:hover {
+            cursor: pointer;
+            background-color: #a9a9a9;
+        }
+
+        .x_text {
+            margin: -4px;
+        }
+
+        .popup h1 {
+            font-family: "DM Serif Display", serif;
+            font-size: 36px;
+            margin: 12px 24px;
+        }
+        
+        .info_container {
+            height: fit-content;
+            margin: 24px;
+            display: flex;
+            flex-direction: row;
+            background-color: #f9fce0;
+            border-bottom: 2px solid #ededed;
+            border-right: 2px solid #ededed;
+            border-top: 2px solid #404040;
+            border-left: 2px solid #404040;
+        }
+
+        .info_container img {
+            width: 64px;
+            height: 64px;
+        }
+        
+        .info_container .right_content {
+            margin: 12px;
+            margin-top: 24px;
+            width: 588px;
+        }
+
+        #footer {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            gap: 20px;
+            background-color: #b6b6b6;
+            position: fixed;   
+            width: -webkit-fill-available;         
+            left: 0;
+            bottom: 0;
+            padding: 6px;
+        }
+
+        #footer .footer_boxes {
+            border-bottom: 2px solid #ededed;
+            border-right: 2px solid #ededed;
+            border-top: 2px solid #404040;
+            border-left: 2px solid #404040;
+            padding: 0px 4px;
+        }
+
+        #footer #git {
+            border-top: 2px solid #ededed;
+            border-left: 2px solid #ededed;
+            border-bottom: 2px solid #404040;
+            border-right: 2px solid #404040;
+        }
+
+        #footer #git:hover {
+            cursor: pointer;
+            background-color: #a9a9a9;
+        }
+    </style>
+        
+    <script>
+        $(document).ready(() => {
+             
+        });
+    </script>
+</head>
+<body>
+    <div id="welcome" class="onscreen popup">
+        <div class="popup_banner_header">
+            Welcome
+            <div class="x_button_wrapper">
+                <div class="x_text">
+                    x
+                </div>
+            </div>
+        </div>
+        <h1>Welcome to My Portfolio!</h1>
+        <div class="info_container">
+            <img class="popup_icon" src="images/star_icon.png"/>
+            <div class="right_content">
+                <strong style="font-size: 12px;">Hi! I'm Caitlyn Parrish-Lewis...</strong>
+                <br><br>
+                I am a sophomore Computer Science and Engineering 
+                Psychology student at Tufts University.
+                <br><br>
+                <strong>I have a drive to create--to apply my classroom knowledge to real
+                world impacts and foster further learning.</strong>
+                <br><br>
+                To get started, <strong>navigate into any of the folders on the side.</strong> 
+                At any time, you can close this tab by clicking 
+                the "x" in the top right, and reopen it by choosing the "Cait's Computer"
+                icon. <strong>Or</strong>, you can scroll down to view my portfolio 
+                in a plaintext manner.
+                <br><br>
+                Thanks for stopping by! :-)
+            </div>
+        </div>
+    </div>
+
+    <div id="footer">
+        <div class="footer_boxes">
+            Made by Caitlyn Parrish-Lewis
+        </div>
+        <div class="footer_boxes" id="git">
+            View this project on GitHub
+        </div>
+    </div>
+    <script>
+        // CREATE DESKTOP ICONS
+        let icons = ["computer_icon", "folder_icon", "folder_icon", "folder_icon", "contact_icon"];
+        let icon_names = ["Cait's<br>Computer", "Experience", "Projects", "Skills", "Contact"];
+
+        icons.forEach(function(element, index) {
+            document.write("<div class='desktop_icon id='" + element + "'>");
+            document.write("<img src='images/" + element  + ".png'/><br>");
+            document.write(icon_names[index]);
+            document.write("</div>");
+        });
+
+        // CREATE DRAGGABLE FUNCTIONALITY FOR POPUPS
+        // const container = document.getElementById("drag_test");
+        // const hammer = new Hammer(container);
+
+        let popUpElements = document.querySelectorAll('.onscreen');
+        popUpElements.forEach(element => {
+            const hammer = new Hammer(element);
+            hammer.get('pan').set({enable: true});
+
+            let initialX, initialY = 0;
+
+            hammer.on('panstart', (event) => {
+                initialX = element.offsetLeft;
+                initialY = element.offsetTop;
+            });
+
+            hammer.on('pan', (event) => {
+                const deltaX = event.deltaX;
+                const deltaY = event.deltaY;
+
+                element.style.left = initialX + deltaX + 'px';
+                element.style.top = initialY + deltaY + 'px';
+            });
+        });
+
+        // ADD CLOSING FUNCTIONALITY TO POPUPS
+        let closeElements = document.querySelectorAll('.x_button_wrapper');
+        closeElements.forEach(element => {
+            element.addEventListener("click", () => {
+                element.parentElement.parentElement.style.display = 'none';
+            });
+        });
+
+    </script>
+</body>
+</html>
+
+<!-- <!DOCTYPE html>
+<html>
+<head>
+    <title>JavaScript Extra Credit Part 1</title>
+    <meta name='viewport' content="width=device-width, initial-scale=1">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    <style type="text/css">
+        body, html {
+            margin: 0;
+        }
+
+        form {
+            display: flex;
+            flex-direction: row;
+            margin: 0 auto;
+            margin-top: 60px;
+            width: fit-content;
+        }
+
+        form #jump-button {
+            margin: 0 40px;
+            padding: 10px;
+            background-color: rgb(172, 172, 172);
+            cursor: pointer;
+            border: 2px solid rgb(255, 55, 55);
+            text-align: center;
+
+            /* prevents text from being highlighted when clicked */
+            user-select: none; 
+        }
+
+        form #left-input, #right-input {
+            border: 2px solid rgb(35, 126, 252);
+            text-align: center;
+        }
+
+        form .box {
+            width: 100px;
+            font-size: 24px;
+        }
+
+    </style>
+        
+    <script>
+        $(document).ready(() => {
+            $('#jump-button').click(() => {
+                if ($('#jump-button').html() == "JUMP &gt;") { // jump right
+                    jump("&lt; JUMP", 'left', 'right');
+
+                } else { // jump left
+                    jump("JUMP &gt;", 'right', 'left');
+                }
+            }); 
+        });
+
+        function jump(newButtonText, directionFrom, directionTo) {
+            $('#jump-button').html(newButtonText); 
+
+            textFromCurrInput = $('#' + directionFrom + '-input').val();
+            $('#' + directionTo + '-input').val(textFromCurrInput);
+            $('#' + directionFrom + '-input').val("");
+        }
+    </script>
+</head>
+<body>
+
+    <form>
+        <input type="text" id="left-input" name="left-input" class="box"/>
+        <div id="jump-button" class="box">JUMP ></div>
+        <input type="text" id="right-input" name="right-input" class="box"/>
+    </form>
+
+</body>
+</html> -->
