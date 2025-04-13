@@ -3,7 +3,6 @@
 <head>
     <title>Caitlyn Parrish-Lewis | Portfolio</title>
     <meta name='viewport' content="width=device-width, initial-scale=1">
-    <meta name="google-site-verification" content="UNxHJiOldSxNsA5GESRmEqdR9Ha8KXn_p6f8PiH-KYo" />
     <link href="https://fonts.cdnfonts.com/css/px-sans-nouveaux" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Serif+Text:ital@0;1&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
@@ -232,11 +231,12 @@
                         elementsOnScreen++;
 
                         elt.style.transform = `translate(-${shift}%, -${shift}%)`
-                        elt.style.zIndex = zIndexPriority++;
-
-                        // ensures z-index of footer will always be greater
-                        document.getElementById("footer").style.zIndex = zIndexPriority++;
                     }
+
+                    elt.style.zIndex = zIndexPriority++;
+
+                    // ensures z-index of footer will always be greater
+                    document.getElementById("footer").style.zIndex = zIndexPriority++;
                 }
 
                 // give all popups touch movements
@@ -259,8 +259,10 @@
                         element.style.left = initialX + deltaX + 'px';
                         element.style.top = initialY + deltaY + 'px';
 
-                        // move the currently clicked popup to the top
+                        //*********************TODO: CHANGE TO SINGLE TAP**************//
+                        // move the currently held popup to the top
                         element.style.zIndex = zIndexPriority++;
+                        document.getElementById("footer").style.zIndex = zIndexPriority++;
                     });
                 });
 
