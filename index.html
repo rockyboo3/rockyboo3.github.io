@@ -44,6 +44,7 @@
             transform: translate(-50%, -50%);
             width: 700px;
             height: fit-content;
+            z-index: 3;
             background-color: #b6b6b6;
             border-top: 2px solid #efefef;
             border-left: 2px solid #efefef;
@@ -151,13 +152,18 @@
 </head>
 <body>
     <script>
+        // variable that will ensure newly opened popups are always on top of previous ones
+        // initial value chosen arbitrarily
+        var zIndexPriority = 4;
+
         $(document).ready(() => {
             // get the json object from a NON-LOCAL url
             $.get("https://rockyboo3.github.io/Portfolio/popup_info.json", (data) => {
-                // loop through each product
+                // loop through each popup's data
                 data["popups"].forEach(popup => {
+                    // create a popup for each desktop icon
                     $('body').append(
-                        '<div style="display:none;" class="onscreen popup id="' + popup["name"] + '">' +
+                        '<div style="display:none;" class="popup" id="' + popup["name"] + '">' +
                             '<div class="popup_banner_header">' +
                                 popup["name"] +
                                 '<div class="x_button_wrapper">' +
@@ -173,6 +179,8 @@
                             '</div>' +
                         '</div>');
                 });
+                // doing everything else after .then will ensure we have access to the necessary id's and 
+                // classes later
             }).then(() => {
                 // CREATE DESKTOP ICONS
                 let icons = ["computer_icon", "folder_icon", "folder_icon", "folder_icon", "contact_icon"];
@@ -181,29 +189,41 @@
                 document.body.insertBefore(desktopContainer, document.getElementById('footer'));
 
                 icons.forEach((element, index) => {
+                    // create elements using .createElement rather than document.write() to ensure
+                    // it can be accessed correctly in openPopup (ensure correct value is being passed)
                     const iconDiv = document.createElement('div');
                     iconDiv.classList.add('desktop_icon');
-                    iconDiv.id = icon_names[index];
+                    iconDiv.id = icon_names[index] + "_icon";
                     iconDiv.innerHTML = `<img src='images/${element}.png'/><br>${icon_names[index]}`;
                     desktopContainer.appendChild(iconDiv);
 
+                    // give each desktop icon double tap touch movement ->
+                    // double tapping a desktop icon will open the corresponding popup
                     var hammer = new Hammer.Manager(iconDiv);
                     hammer.add(new Hammer.Tap({ event: 'doubletap', taps: 2 }));
                     hammer.on("doubletap", function(ev) {
+                        // pass icon_names[index] because it is equal to the popup's ids
                         openPopup(icon_names[index]);
                     });
                 });
 
                 // OPEN A NEW POPUP
                 function openPopup(element_id) {
-                    document.getElementById(element_id).style.display = "block";
+                    let elt = document.getElementById(element_id);
+                    elt.style.display = "block";
+
+                    // reset position to be middle of screen
+                    elt.style.top = "50%";
+                    elt.style.left = "50%";
+                    elt.style.transform = "translate(-50%, -50%)";
+                    elt.style.zIndex = zIndexPriority++;
+
+                    // ensures z-index of footer will always be greater
+                    document.getElementById("footer").style.zIndex = zIndexPriority++;
                 }
 
-                // CREATE DRAGGABLE FUNCTIONALITY FOR POPUPS
-                // const container = document.getElementById("drag_test");
-                // const hammer = new Hammer(container);
-
-                let popUpElements = document.querySelectorAll('.onscreen');
+                // give all popups touch movements
+                let popUpElements = document.querySelectorAll('.popup');
                 popUpElements.forEach(element => {
                     const hammer = new Hammer(element);
                     hammer.get('pan').set({enable: true});
@@ -234,37 +254,6 @@
             });
         });
     </script>
-    <!-- <div id="welcome" class="onscreen popup">
-        <div class="popup_banner_header">
-            Welcome
-            <div class="x_button_wrapper">
-                <div class="x_text">
-                    x
-                </div>
-            </div>
-        </div>
-        <h1>Welcome to My Portfolio!</h1>
-        <div class="info_container">
-            <img class="popup_icon" src="images/star_icon.png"/>
-            <div class="right_content">
-                <strong style='font-size: 12px;'>Hi! I'm Caitlyn Parrish-Lewis...</strong>
-                <br><br>
-                I am a sophomore Computer Science and Engineering 
-                Psychology student at Tufts University.
-                <br><br>
-                <strong>I have a drive to create--to apply my classroom knowledge to real
-                world impacts and foster further learning.</strong>
-                <br><br>
-                To get started, <strong>navigate into any of the folders on the side.</strong> 
-                At any time, you can close this tab by clicking 
-                the "x" in the top right, and reopen it by choosing the "Cait's Computer"
-                icon. <strong>Or</strong>, you can scroll down to view my portfolio 
-                in a plaintext manner.
-                <br><br>
-                Thanks for stopping by! :-)
-            </div>
-        </div>
-    </div> -->
 
     <div id="footer">
         <div class="footer_boxes">
@@ -276,141 +265,5 @@
             </a>
         </div>
     </div>
-    <script>
-        // // CREATE DESKTOP ICONS
-        // let icons = ["computer_icon", "folder_icon", "folder_icon", "folder_icon", "contact_icon"];
-        // let icon_names = ["Cait's Computer", "Experience", "Projects", "Skills", "Contact"];
-        // let desktopContainer = document.createElement('div');
-        // document.body.insertBefore(desktopContainer, document.getElementById('footer'));
-
-        // icons.forEach((element, index) => {
-        //     const iconDiv = document.createElement('div');
-        //     iconDiv.classList.add('desktop_icon');
-        //     iconDiv.id = icon_names[index];
-        //     iconDiv.innerHTML = `<img src='images/${element}.png'/><br>${icon_names[index]}`;
-        //     desktopContainer.appendChild(iconDiv);
-
-        //     var hammer = new Hammer.Manager(iconDiv);
-        //     hammer.add(new Hammer.Tap({ event: 'doubletap', taps: 2 }));
-        //     hammer.on("doubletap", function(ev) {
-        //         openPopup(index);
-        //     });
-        // });
-
-        // // OPEN A NEW POPUP
-        // function openPopup(element_index) {
-        //     alert(element_index);
-        // }
-
-        // // CREATE DRAGGABLE FUNCTIONALITY FOR POPUPS
-        // // const container = document.getElementById("drag_test");
-        // // const hammer = new Hammer(container);
-
-        // let popUpElements = document.querySelectorAll('.onscreen');
-        // popUpElements.forEach(element => {
-        //     const hammer = new Hammer(element);
-        //     hammer.get('pan').set({enable: true});
-
-        //     let initialX, initialY = 0;
-
-        //     hammer.on('panstart', (event) => {
-        //         initialX = element.offsetLeft;
-        //         initialY = element.offsetTop;
-        //     });
-
-        //     hammer.on('pan', (event) => {
-        //         const deltaX = event.deltaX;
-        //         const deltaY = event.deltaY;
-
-        //         element.style.left = initialX + deltaX + 'px';
-        //         element.style.top = initialY + deltaY + 'px';
-        //     });
-        // });
-
-        // // ADD CLOSING FUNCTIONALITY TO POPUPS
-        // let closeElements = document.querySelectorAll('.x_button_wrapper');
-        // closeElements.forEach(element => {
-        //     element.addEventListener("click", () => {
-        //         element.parentElement.parentElement.style.display = 'none';
-        //     });
-        // });
-
-    </script>
 </body>
 </html>
-
-<!-- <!DOCTYPE html>
-<html>
-<head>
-    <title>JavaScript Extra Credit Part 1</title>
-    <meta name='viewport' content="width=device-width, initial-scale=1">
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-
-    <style type="text/css">
-        body, html {
-            margin: 0;
-        }
-
-        form {
-            display: flex;
-            flex-direction: row;
-            margin: 0 auto;
-            margin-top: 60px;
-            width: fit-content;
-        }
-
-        form #jump-button {
-            margin: 0 40px;
-            padding: 10px;
-            background-color: rgb(172, 172, 172);
-            cursor: pointer;
-            border: 2px solid rgb(255, 55, 55);
-            text-align: center;
-
-            /* prevents text from being highlighted when clicked */
-            user-select: none; 
-        }
-
-        form #left-input, #right-input {
-            border: 2px solid rgb(35, 126, 252);
-            text-align: center;
-        }
-
-        form .box {
-            width: 100px;
-            font-size: 24px;
-        }
-
-    </style>
-        
-    <script>
-        $(document).ready(() => {
-            $('#jump-button').click(() => {
-                if ($('#jump-button').html() == "JUMP &gt;") { // jump right
-                    jump("&lt; JUMP", 'left', 'right');
-
-                } else { // jump left
-                    jump("JUMP &gt;", 'right', 'left');
-                }
-            }); 
-        });
-
-        function jump(newButtonText, directionFrom, directionTo) {
-            $('#jump-button').html(newButtonText); 
-
-            textFromCurrInput = $('#' + directionFrom + '-input').val();
-            $('#' + directionTo + '-input').val(textFromCurrInput);
-            $('#' + directionFrom + '-input').val("");
-        }
-    </script>
-</head>
-<body>
-
-    <form>
-        <input type="text" id="left-input" name="left-input" class="box"/>
-        <div id="jump-button" class="box">JUMP ></div>
-        <input type="text" id="right-input" name="right-input" class="box"/>
-    </form>
-
-</body>
-</html> -->
