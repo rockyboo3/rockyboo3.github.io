@@ -32,7 +32,7 @@
             "name": "Contact",
             "header": "Contact Information",
             "icon": "letter",
-            "content": "<strong style='font-size: 12px;'>Feel free to reach out at any time with any questions or comments!<br>I'd love to talk!</strong><br><br><strong>LinkedIn</strong> - <a href='https://www.linkedin.com/in/cparrishlewis/'>linkedin.com/in/cparrishlewis</a><br><div id='email_link' name='caitlyn.parrish_lewis@tufts.edu'><strong>Email</strong> - caitlyn.parrish_lewis@tufts.edu < CLICK ME!</div><br><strong>GitHub</strong> - <a href='https://github.com/rockyboo3'>github.com/rockyboo3</a><br><br>I look forward to speaking with you soon! :-)"
+            "content": "<strong style='font-size: 12px;'>Feel free to reach out at any time with any questions or comments!<br>I'd love to talk!</strong><br><br><strong>LinkedIn</strong> - <a href='https://www.linkedin.com/in/cparrishlewis/'>linkedin.com/in/cparrishlewis</a><br><div id='email_link' name='caitlyn.parrish_lewis@tufts.edu'>caitlyn.parrish_lewis@tufts.edu</div><br><strong>GitHub</strong> - <a href='https://github.com/rockyboo3'>github.com/rockyboo3</a><br><br>I look forward to speaking with you soon! :-)"
         }
     ]
 }
