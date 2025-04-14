@@ -196,9 +196,30 @@
             -webkit-user-select: none;
             -ms-user-select: none;
         }
+        
+        #email_link {
+            color: blue;
+        }
 
         #email_link:hover {
             cursor: pointer;
+        }
+
+        #email_link::before {
+            content: "Email - ";
+            font-weight: bold;
+            color: black;
+        }
+
+        #email_link::after {
+            content: "CLICK ME!";
+            color: black;
+            background-color: #b6b6b6;
+            border-left: 2px solid #ededed;
+            border-top: 2px solid #ededed;
+            border-right: 2px solid #404040;
+            border-bottom: 2px solid #404040;
+            margin-left: 6px;
         }
     </style>
 </head>
@@ -357,25 +378,11 @@
                             });
                         });
 
-                        // function copyEmail() {
-                        //     let copyText = document.getElementById("email_link");
-
-                        //     // select text field
-                        //     copyText.innerHTML;
-                        //     // copyText.setSelectionRange(0, 99999);
-
-                        //     // copy the text inside the text field
-                        //     navigator.clipboard.writeText(copyText.value);
-                            
-                        //     // Alert the copied text
-                        //     alert("Copied the text: " + copyText.value);
-                        // }
-
                         document.getElementById("email_link").addEventListener("click", () => {
-                            let element = document.getElementById("email_link");
-                            console.log(element.getAttribute("name"));
-                            // navigator.clipboard.writeText(element.innerHTML);
-                            // alert("Copied the text: " + (element.innerHTML));
+                            let elementName = document.getElementById("email_link").getAttribute("name");
+                            console.log(elementName);
+                            navigator.clipboard.writeText(elementName);
+                            alert("Copied the text: " + (elementName));
                         });
 
                         // resolve after all async and DOM setup
