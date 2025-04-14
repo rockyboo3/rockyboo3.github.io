@@ -37,7 +37,7 @@
             width: 42px;
         }
 
-        .popup {
+        .popup, .popup_no_drag {
             position: fixed;
             cursor: grab;
             top: 50%;
@@ -63,7 +63,7 @@
             justify-content: space-between;
         }
 
-        .x_button_wrapper {
+        .x_button_wrapper, .x_button_wrapper_no_click {
             width: 14px;
             height: 14px;
             color: black;
@@ -150,9 +150,61 @@
             cursor: pointer;
             background-color: #a9a9a9;
         }
+
+        #loading_screen {
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+            background-color: teal;
+            position: fixed;
+            top: 0;
+            left: 0;
+        }
+
+        #loading {
+            cursor: default;
+            width: 250px;
+        }
+
+        #loading p {
+            padding: 0 14px;
+        }
+
+        #progress_bar {
+            width: 220px; 
+
+            height: 20px;
+            margin: 0 auto;
+            margin: 14px;
+            border-bottom: 2px solid #ededed;
+            border-right: 2px solid #ededed;
+            border-top: 2px solid #404040;
+            border-left: 2px solid #404040;
+        }
+
+        #progress {
+            width: 10%;
+            height: 20px;
+            background-color: navy;
+        }
     </style>
 </head>
 <body>
+    <div id="loading_screen">
+        <div class="popup_no_drag" id="loading">
+            <div class="popup_banner_header" id="loading_bar_header">
+                Loading
+                <div class="x_button_wrapper_no_click">
+                    <div class="x_text">x</div>
+                </div>
+            </div>
+            <p>Please wait, fetching data...</p>
+            <div id="progress_bar">
+                <div id="progress"></div>
+            </div>
+        </div>
+    </div>
+
     <script>
         // variable that will ensure newly opened popups are always on top of previous ones
         // initial value chosen arbitrarily
@@ -162,121 +214,158 @@
         var elementsOnScreen = 1;
 
         $(document).ready(() => {
-            // get the json object from a NON-LOCAL url
-            $.get("https://rockyboo3.github.io/portfolio/popup_info.json", (data) => {
-                // loop through each popup's data
-                data["popups"].forEach(popup => {
-                    // create a popup for each desktop icon
-                    $('body').append(
-                        '<div style="display:none;" class="popup" id="' + popup["name"] + '">' +
-                            '<div class="popup_banner_header">' +
-                                popup["name"] +
-                                '<div class="x_button_wrapper">' +
-                                    '<div class="x_text">x</div>' +
-                                '</div>' +
-                            '</div>' +
-                            '<h1>' + popup["header"] + '</h1>' +
-                            '<div class="info_container">' +
-                                '<img class="popup_icon" src="images/' + popup["icon"] + '_icon.png"/>' +
-                                '<div class="right_content">' +
-                                    popup["content"] +
-                                '</div>' +
-                            '</div>' +
-                        '</div>');
+            function loadDoc() {
+                return new Promise((resolve, reject) => {
+                    // get the json object from a NON-LOCAL url
+                    $.get("https://rockyboo3.github.io/portfolio/popup_info.json", (data) => {
+                        // loop through each popup's data
+                        data["popups"].forEach(popup => {
+                            // create a popup for each desktop icon
+                            $('body').append(
+                                '<div style="display:none;" class="popup" id="' + popup["name"] + '">' +
+                                    '<div class="popup_banner_header">' +
+                                        popup["name"] +
+                                        '<div class="x_button_wrapper">' +
+                                            '<div class="x_text">x</div>' +
+                                        '</div>' +
+                                    '</div>' +
+                                    '<h1>' + popup["header"] + '</h1>' +
+                                    '<div class="info_container">' +
+                                        '<img class="popup_icon" src="images/' + popup["icon"] + '_icon.png"/>' +
+                                        '<div class="right_content">' +
+                                            popup["content"] +
+                                        '</div>' +
+                                    '</div>' +
+                                '</div>');
+                        });
+                        // doing everything else after .then will ensure we have access to the necessary id's and 
+                        // classes later
+                    }).then(() => {
+                        // when the webpage is first loaded, users are always greeted w/ the welcome screen
+                        document.getElementById("Cait's Computer").style.display = "block";
+
+                        // CREATE DESKTOP ICONS
+                        let icons = ["computer_icon", "folder_icon", "folder_icon", "folder_icon", "contact_icon"];
+                        let icon_names = ["Cait's Computer", "Experience", "Projects", "Skills", "Contact"];
+                        let desktopContainer = document.createElement('div');
+                        document.body.insertBefore(desktopContainer, document.getElementById('footer'));
+
+                        icons.forEach((element, index) => {
+                            // create elements using .createElement rather than document.write() to ensure
+                            // it can be accessed correctly in openPopup (ensure correct value is being passed)
+                            const iconDiv = document.createElement('div');
+                            iconDiv.classList.add('desktop_icon');
+                            iconDiv.id = icon_names[index] + "_icon";
+                            iconDiv.innerHTML = `<img src='images/${element}.png'/><br>${icon_names[index]}`;
+                            desktopContainer.appendChild(iconDiv);
+
+                            // give each desktop icon double tap touch movement ->
+                            // double tapping a desktop icon will open the corresponding popup
+                            var hammer = new Hammer.Manager(iconDiv);
+                            hammer.add(new Hammer.Tap({ event: 'doubletap', taps: 2 }));
+                            hammer.on("doubletap", function(ev) {
+                                // pass icon_names[index] because it is equal to the popup's ids
+                                openPopup(icon_names[index]);
+                            });
+                        });
+
+                        // OPEN A NEW POPUP
+                        function openPopup(element_id) {
+                            let elt = document.getElementById(element_id);
+
+                            // only open the popup if it isn't already on the screen
+                            if (elt.style.display != "block") {
+                                elt.style.display = "block";
+
+                                // reset position to be middle of screen
+                                elt.style.top = "50%";
+                                elt.style.left = "50%";
+
+                                // shifts new popups from center position dependent on how many 
+                                // popups are currently on the screen
+                                let shift = 50 - elementsOnScreen*6;
+                                elementsOnScreen++;
+
+                                elt.style.transform = `translate(-${shift}%, -${shift}%)`
+                            }
+
+                            elt.style.zIndex = zIndexPriority++;
+
+                            // ensures z-index of footer will always be greater
+                            document.getElementById("footer").style.zIndex = zIndexPriority++;
+                        }
+
+                        // give all popups touch movements
+                        let popUpElements = document.querySelectorAll('.popup');
+                        popUpElements.forEach(element => {
+                            const hammer = new Hammer(element);
+                            hammer.get('pan').set({enable: true});
+
+                            let initialX, initialY = 0;
+
+                            hammer.on('panstart', (event) => {
+                                initialX = element.offsetLeft;
+                                initialY = element.offsetTop;
+                            });
+
+                            hammer.on('pan', (event) => {
+                                const deltaX = event.deltaX;
+                                const deltaY = event.deltaY;
+
+                                element.style.left = initialX + deltaX + 'px';
+                                element.style.top = initialY + deltaY + 'px';
+
+                                // move the currently held popup to the top
+                                element.style.zIndex = zIndexPriority++;
+                                document.getElementById("footer").style.zIndex = zIndexPriority++;
+                            });
+                        });
+
+                        // ADD CLOSING FUNCTIONALITY TO POPUPS
+                        let closeElements = document.querySelectorAll('.x_button_wrapper');
+                        closeElements.forEach(element => {
+                            element.addEventListener("click", () => {
+                                element.parentElement.parentElement.style.display = 'none';
+                                elementsOnScreen--;
+                            });
+                        });
+
+                        // resolve after all async and DOM setup
+                        resolve();
+                    }).fail((err) => reject(err));
                 });
-                // doing everything else after .then will ensure we have access to the necessary id's and 
-                // classes later
-            }).then(() => {
-                // when the webpage is first loaded, users are always greeted w/ the welcome screen
-                document.getElementById("Cait's Computer").style.display = "block";
+            }
 
-                // CREATE DESKTOP ICONS
-                let icons = ["computer_icon", "folder_icon", "folder_icon", "folder_icon", "contact_icon"];
-                let icon_names = ["Cait's Computer", "Experience", "Projects", "Skills", "Contact"];
-                let desktopContainer = document.createElement('div');
-                document.body.insertBefore(desktopContainer, document.getElementById('footer'));
+            async function loadProgressBar() {
+                let progress = document.getElementById("progress");
 
-                icons.forEach((element, index) => {
-                    // create elements using .createElement rather than document.write() to ensure
-                    // it can be accessed correctly in openPopup (ensure correct value is being passed)
-                    const iconDiv = document.createElement('div');
-                    iconDiv.classList.add('desktop_icon');
-                    iconDiv.id = icon_names[index] + "_icon";
-                    iconDiv.innerHTML = `<img src='images/${element}.png'/><br>${icon_names[index]}`;
-                    desktopContainer.appendChild(iconDiv);
+                // run loop while the loading screen is visible
+                while (document.getElementById("loading_screen").style.display != "none") {
+                    for (let i = 1; i <= 10; i ++) {
+                        let percent = (i * 10) + "%";
+                        progress.style.width = percent;
 
-                    // give each desktop icon double tap touch movement ->
-                    // double tapping a desktop icon will open the corresponding popup
-                    var hammer = new Hammer.Manager(iconDiv);
-                    hammer.add(new Hammer.Tap({ event: 'doubletap', taps: 2 }));
-                    hammer.on("doubletap", function(ev) {
-                        // pass icon_names[index] because it is equal to the popup's ids
-                        openPopup(icon_names[index]);
-                    });
-                });
-
-                // OPEN A NEW POPUP
-                function openPopup(element_id) {
-                    let elt = document.getElementById(element_id);
-
-                    // only open the popup if it isn't already on the screen
-                    if (elt.style.display != "block") {
-                        elt.style.display = "block";
-
-                        // reset position to be middle of screen
-                        elt.style.top = "50%";
-                        elt.style.left = "50%";
-
-                        // shifts new popups from center position dependent on how many 
-                        // popups are currently on the screen
-                        let shift = 50 - elementsOnScreen*6;
-                        elementsOnScreen++;
-
-                        elt.style.transform = `translate(-${shift}%, -${shift}%)`
+                        // wait before next iteration
+                        await new Promise(resolve => setTimeout(resolve, 170));
                     }
 
-                    elt.style.zIndex = zIndexPriority++;
-
-                    // ensures z-index of footer will always be greater
-                    document.getElementById("footer").style.zIndex = zIndexPriority++;
+                    // reset progress back to 10% when a full iteration is completed
+                    progress.style.width = "10%";
+                    await new Promise(resolve => setTimeout(resolve, 170));
                 }
+            }
+            
+            async function confirmLoad() {
+                await loadDoc();
+                //document.getElementById("loading_screen").style.display = "none";
+                
+                setTimeout(() => {
+                    document.getElementById("loading_screen").style.display = "none";
+                }, 2000);
+            }
 
-                // give all popups touch movements
-                let popUpElements = document.querySelectorAll('.popup');
-                popUpElements.forEach(element => {
-                    const hammer = new Hammer(element);
-                    hammer.get('pan').set({enable: true});
-
-                    let initialX, initialY = 0;
-
-                    hammer.on('panstart', (event) => {
-                        initialX = element.offsetLeft;
-                        initialY = element.offsetTop;
-                    });
-
-                    hammer.on('pan', (event) => {
-                        const deltaX = event.deltaX;
-                        const deltaY = event.deltaY;
-
-                        element.style.left = initialX + deltaX + 'px';
-                        element.style.top = initialY + deltaY + 'px';
-
-                        //*********************TODO: CHANGE TO SINGLE TAP**************//
-                        // move the currently held popup to the top
-                        element.style.zIndex = zIndexPriority++;
-                        document.getElementById("footer").style.zIndex = zIndexPriority++;
-                    });
-                });
-
-                // ADD CLOSING FUNCTIONALITY TO POPUPS
-                let closeElements = document.querySelectorAll('.x_button_wrapper');
-                closeElements.forEach(element => {
-                    element.addEventListener("click", () => {
-                        element.parentElement.parentElement.style.display = 'none';
-                        elementsOnScreen--;
-                    });
-                });
-            });
+            loadProgressBar();
+            confirmLoad();
         });
     </script>
 
