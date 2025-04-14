@@ -315,6 +315,15 @@
                             const hammer = new Hammer(element);
                             hammer.get('pan').set({enable: true});
 
+                            // create new hammer to handle single taps on popups
+                            // (should move popup to the front)
+                            const hammerTap = new Hammer.Manager(element);
+                            hammerTap.add(new Hammer.Tap({ event: 'singletap' }));
+                            hammerTap.on("singletap", function(ev) {
+                                element.style.zIndex = ++zIndexPriority;
+                                document.getElementById("footer").style.zIndex = ++zIndexPriority;
+                            });
+
                             let initialX, initialY = 0;
 
                             hammer.on('panstart', (event) => {
