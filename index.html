@@ -287,6 +287,11 @@
                                 elementsOnScreen++;
 
                                 elt.style.transform = `translate(-${shift}%, -${shift}%)`
+                            } else {
+                                // if the popup is already on the screen and another open attempt
+                                // occurs, move it back to the middle of the screen
+                                elt.style.top = "50%";
+                                elt.style.left = "50%";
                             }
 
                             elt.style.zIndex = zIndexPriority++;
