@@ -172,7 +172,6 @@
 
         #progress_bar {
             width: 220px; 
-
             height: 20px;
             margin: 0 auto;
             margin: 14px;
@@ -212,7 +211,8 @@
         }
 
         #email_link::after {
-            content: "CLICK ME!";
+            content: "CLICK TO COPY";
+            padding: 2px;
             color: black;
             background-color: #b6b6b6;
             border-left: 2px solid #ededed;
@@ -382,7 +382,7 @@
                             let elementName = document.getElementById("email_link").getAttribute("name");
                             console.log(elementName);
                             navigator.clipboard.writeText(elementName);
-                            alert("Copied the text: " + (elementName));
+                            alert("Copied to clipboard: " + (elementName));
                         });
 
                         // resolve after all async and DOM setup
@@ -391,6 +391,8 @@
                 });
             }
 
+            // progress bar that runs until all elements are established 
+            // (including calls to JSON object)
             async function loadProgressBar() {
                 let progress = document.getElementById("progress");
 
@@ -426,7 +428,7 @@
 
     <div id="footer">
         <div class="footer_boxes">
-            Made by Caitlyn Parrish-Lewis
+            Made by &copy; Caitlyn Parrish-Lewis 2025
         </div>
         <div class="footer_boxes" id="git">
             <a href="https://github.com/rockyboo3/portfolio">
