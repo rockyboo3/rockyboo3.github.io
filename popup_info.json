@@ -3,36 +3,31 @@
         {
             "name": "Cait's Computer",
             "header": "Welcome to My Portfolio",
-            "icon": "info",
-            "content": "<strong style='font-size: 12px;'>Hi! I'm Caitlyn Parrish-Lewis...</strong><br><br>I am a sophomore Computer Science and Engineering Psychology student at Tufts University.<br><br><strong>I have a drive to create--to apply my classroom knowledge to real world impacts and foster further learning.</strong><br><br>To get started, <strong>navigate into any of the folders on the side.</strong> At any time, you can close this tab by clicking the 'x' in the top right, and reopen it by choosing the 'Cait's Computer' icon. <strong>Or</strong>, you can scroll down to view my portfolio in a plaintext manner.<br><br>Thanks for stopping by! :-)"
+            "icon": "info"
         },
         
         {
             "name": "Experience",
             "header": "Experiences",
-            "icon": "star",
-            "content": "<strong style='font-size: 12px;'>Hi! I'm Caitlyn Parrish-Lewis...</strong><br><br>I am a sophomore Computer Science and Engineering Psychology student at Tufts University.<br><br><strong>I have a drive to create--to apply my classroom knowledge to real world impacts and foster further learning.</strong><br><br>To get started, <strong>navigate into any of the folders on the side.</strong> At any time, you can close this tab by clicking the 'x' in the top right, and reopen it by choosing the 'Cait's Computer' icon. <strong>Or</strong>, you can scroll down to view my portfolio in a plaintext manner.<br><br>Thanks for stopping by! :-)"
+            "icon": "star"
         },
 
         {
             "name": "Projects",
             "header": "Projects",
-            "icon": "paint",
-            "content": ""
+            "icon": "paint"
         },
 
         {
             "name": "Skills",
             "header": "Technical and Soft Skills",
-            "icon": "smiley",
-            "content": "<strong style='font-size: 12px;'>Languages and Technologies</strong><br><strong>Most experience:</strong> C++, HTML, JavaScript, WordPress, Java, CSS, TypeScript<br><strong>Intermediate experience:</strong> SQL, PHP, Python, Node.js, NoSQL<br><br><strong style='font-size: 12px;'>Soft skills</strong><br>Adaptability, Collaboration, Leadership, Communication, Problem-solving, Creativity"
+            "icon": "smiley"
         },
 
         {
             "name": "Contact",
             "header": "Contact Information",
-            "icon": "letter",
-            "content": "<strong style='font-size: 12px;'>Feel free to reach out at any time with any questions or comments!<br>I'd love to talk!</strong><br><br><strong>LinkedIn</strong> - <a href='https://www.linkedin.com/in/cparrishlewis/'>linkedin.com/in/cparrishlewis</a><br><div id='email_link' name='caitlyn.parrish_lewis@tufts.edu'>caitlyn.parrish_lewis@tufts.edu</div><strong>GitHub</strong> - <a href='https://github.com/rockyboo3'>github.com/rockyboo3</a><br><br>I look forward to speaking with you soon! :-)"
+            "icon": "letter"
         }
     ]
 }
