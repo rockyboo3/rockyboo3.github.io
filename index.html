@@ -266,15 +266,34 @@
                                     '<h1>' + popup["header"] + '</h1>' +
                                     '<div class="info_container">' +
                                         '<img class="popup_icon" src="images/' + popup["icon"] + '_icon.png"/>' +
-                                        '<div class="right_content">' +
-                                            popup["content"] +
-                                        '</div>' +
+                                        '<div class="right_content" id="' + popup["name"] + '_content"></div>' +
                                     '</div>' +
                                 '</div>');
                         });
                         // doing everything else after .then will ensure we have access to the necessary id's and 
                         // classes later
                     }).then(() => {
+                        $(".right_content").each(function() {
+                            // convert the id to the associated filename (no special characters)
+                            fetch(this.id.replace(/[^A-Z0-9]/ig, '') + ".html")
+                                .then(response => response.text())
+                                .then(htmlContent => {
+                                    // set the content of the right_content div to the fetched HTML for each popup
+                                    this.innerHTML = htmlContent;
+
+                                    // attach the email link click event for the contact popup
+                                    let emailLink = document.getElementById("email_link");
+                                    if (emailLink) {
+                                        emailLink.addEventListener("click", () => {
+                                        let elementName = document.getElementById("email_link").getAttribute("name");
+                                        console.log(elementName);
+                                        navigator.clipboard.writeText(elementName);
+                                        alert("Copied to clipboard: " + (elementName));
+                                    });
+                                    }
+                                });
+                        }); 
+
                         // when the webpage is first loaded, users are always greeted w/ the welcome screen
                         document.getElementById("Cait's Computer").style.display = "block";
 
@@ -376,13 +395,6 @@
                                 element.parentElement.parentElement.style.display = 'none';
                                 elementsOnScreen--;
                             });
-                        });
-
-                        document.getElementById("email_link").addEventListener("click", () => {
-                            let elementName = document.getElementById("email_link").getAttribute("name");
-                            console.log(elementName);
-                            navigator.clipboard.writeText(elementName);
-                            alert("Copied to clipboard: " + (elementName));
                         });
 
                         // resolve after all async and DOM setup
