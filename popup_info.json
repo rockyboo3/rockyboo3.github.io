@@ -25,7 +25,7 @@
             "name": "Skills",
             "header": "Technical and Soft Skills",
             "icon": "smiley",
-            "content": "<strong style='font-size: 12px;'>Languages and Technologies</strong><br><br><strong>Most experience:</strong> C++, HTML, CSS, JavaScript, Java, TypeScript, WordPress, SQL<br><strong>Intermediate experience:</strong> Python, php, Node.js, NoSQL<br><br><strong>Soft skills: </strong> Adaptability, Collaboration, Leadership, Communication, Problem-solving, Creativity"
+            "content": "<strong style='font-size: 12px;'>Languages and Technologies</strong><br><br><strong>Most experience:</strong> C++, HTML, JavaScript, WordPress, Java, CSS, TypeScript<br><strong>Intermediate experience:</strong> SQL, PHP, Python, Node.js, NoSQL<br><br><strong style='font-size: 12px;'>Soft skills: </strong><br><br>Adaptability, Collaboration, Leadership, Communication, Problem-solving, Creativity"
         },
 
         {
