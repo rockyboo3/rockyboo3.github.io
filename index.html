@@ -92,6 +92,8 @@
         
         .info_container {
             height: fit-content;
+            max-height: 300px;
+            overflow: auto;
             margin: 24px;
             display: flex;
             flex-direction: row;
@@ -102,7 +104,7 @@
             border-left: 2px solid #404040;
         }
 
-        .info_container img {
+        .popup_icon {
             width: 56px;
             height: 56px;
             padding: 10px;
@@ -135,18 +137,19 @@
             padding: 0px 4px;
         }
 
-        #footer #git {
+        #footer .clickable {
             border-top: 2px solid #ededed;
             border-left: 2px solid #ededed;
             border-bottom: 2px solid #404040;
             border-right: 2px solid #404040;   
+            padding: 0px 4px;
         }
 
-        #footer #git a {
+        #footer .clickable a {
             text-decoration: none;
         }
 
-        #footer #git:hover {
+        #footer .clickable:hover {
             cursor: pointer;
             background-color: #a9a9a9;
         }
@@ -221,6 +224,37 @@
             border-bottom: 2px solid #404040;
             margin-left: 6px;
         }
+
+        /* CUSTOM SCROLLBAR */
+        ::-webkit-scrollbar {
+            width: 20px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background-color: #e1e1e1;
+        }
+
+        ::-webkit-scrollbar-thumb, ::-webkit-scrollbar-button:vertical:start:decrement,  ::-webkit-scrollbar-button:vertical:end:increment {
+            background-color: #c0c0c0;
+            border-left: 2px solid #ededed;
+            border-top: 2px solid #ededed;
+            border-right: 2px solid #404040;
+            border-bottom: 2px solid #404040;
+        }
+
+        ::-webkit-scrollbar-button:vertical:start:decrement,  ::-webkit-scrollbar-button:vertical:end:increment {
+            height: 20px;
+        }
+
+        ::-webkit-scrollbar-button:vertical:start:decrement {
+            background: url('data:image/svg+xml;utf8,<svg fill="black" xmlns="http://www.w3.org/2000/svg" width="6" height="6"><polygon points="3,0 6,6 0,6"/></svg>') no-repeat center;
+            background-color: #c0c0c0;
+        }
+
+        ::-webkit-scrollbar-button:vertical:end:increment {
+            background: url('data:image/svg+xml;utf8,<svg fill="black" xmlns="http://www.w3.org/2000/svg" width="6" height="6"><polygon points="0,0 6,0 3,6"/></svg>') no-repeat center;
+            background-color: #c0c0c0;
+        }
     </style>
 </head>
 <body>
@@ -254,6 +288,11 @@
                     $.get("https://rockyboo3.github.io/portfolio/popup_info.json", (data) => {
                         // loop through each popup's data
                         data["popups"].forEach(popup => {
+                            let iconHtml = '';
+                            if (popup["icon"] != "n/a") {
+                                iconHtml = '<img class="popup_icon" src="images/' + popup["icon"] + '_icon.png"/>';
+                            }
+
                             // create a popup for each desktop icon
                             $('body').append(
                                 '<div style="display:none;" class="popup" id="' + popup["name"] + '">' +
@@ -265,8 +304,8 @@
                                     '</div>' +
                                     '<h1>' + popup["header"] + '</h1>' +
                                     '<div class="info_container">' +
-                                        '<img class="popup_icon" src="images/' + popup["icon"] + '_icon.png"/>' +
-                                        '<div class="right_content" id="' + popup["name"] + '_content"></div>' +
+                                        iconHtml + 
+                                        '<div class="right_content" id="' + popup["name"] + 'content"></div>' +
                                     '</div>' +
                                 '</div>');
                         });
@@ -274,24 +313,31 @@
                         // classes later
                     }).then(() => {
                         $(".right_content").each(function() {
-                            // convert the id to the associated filename (no special characters)
-                            fetch(this.id.replace(/[^A-Z0-9]/ig, '') + ".html")
-                                .then(response => response.text())
-                                .then(htmlContent => {
-                                    // set the content of the right_content div to the fetched HTML for each popup
-                                    this.innerHTML = htmlContent;
+                            // the experiences content is loaded through a json, so must be done differently
+                            if (this.id.replace(/[^A-Z0-9]/ig, '') == "Experiencecontent") {
+                                let script = document.createElement('script');
+                                script.src = 'Experiencecontent.js';
+                                this.appendChild(script);
+                            } else {
+                                // convert the id to the associated filename (no special characters)
+                                fetch(this.id.replace(/[^A-Z0-9]/ig, '') + ".html")
+                                    .then(response => response.text())
+                                    .then(htmlContent => {
+                                        // set the content of the right_content div to the fetched HTML for each popup
+                                        this.innerHTML = htmlContent;
 
-                                    // attach the email link click event for the contact popup
-                                    let emailLink = document.getElementById("email_link");
-                                    if (emailLink) {
-                                        emailLink.addEventListener("click", () => {
-                                        let elementName = document.getElementById("email_link").getAttribute("name");
-                                        console.log(elementName);
-                                        navigator.clipboard.writeText(elementName);
-                                        alert("Copied to clipboard: " + (elementName));
+                                        // attach the email link click event for the contact popup
+                                        let emailLink = document.getElementById("email_link");
+                                        if (emailLink) {
+                                            emailLink.addEventListener("click", () => {
+                                                let elementName = document.getElementById("email_link").getAttribute("name");
+                                                console.log(elementName);
+                                                navigator.clipboard.writeText(elementName);
+                                                alert("Copied to clipboard: " + (elementName));
+                                            });
+                                        }
                                     });
-                                    }
-                                });
+                            }
                         }); 
 
                         // when the webpage is first loaded, users are always greeted w/ the welcome screen
@@ -442,10 +488,17 @@
         <div class="footer_boxes">
             Made by &copy; Caitlyn Parrish-Lewis 2025
         </div>
-        <div class="footer_boxes" id="git">
-            <a href="https://github.com/rockyboo3/portfolio">
-                View this project on GitHub
-            </a>
+        <div style="display: flex; flex-direction: row; gap: 8px;">
+            <div class="clickable">
+                <a target="_blank" href="https://drive.google.com/file/d/1dp7Yi87TLk9tA-18DZqDgZSiDYzGUq51/view?usp=sharing">
+                    Download Resume
+                </a>
+            </div>
+            <div class="clickable">
+                <a target="_blank" href="https://github.com/rockyboo3/portfolio">
+                    View this project on GitHub
+                </a>
+            </div>
         </div>
     </div>
 </body>
