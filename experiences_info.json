@@ -1,0 +1,43 @@
+{
+    "experiences": [
+        {
+            "header": "Veolia North America",
+            "subheader": "Junior Drupal Development Intern | May 2025 - Present | Paramus, NJ",
+            "description": "- Incoming SEED intern",
+            "skills": "Drupal, PHP, Git, HTML, CSS, JS",
+            "img": "veolia"
+        },
+        
+        {
+            "header": "University of Massachusetts Amherst, Physics Department",
+            "subheader": "Webmaster | Sep 2023 - May 2024 | Amherst, MA",
+            "description": "- Designed, created, and supported existing and new projects, including event websites and digital flyers<br>- Communicated professionally with clients by discussing their visions, adapting to feedback, and providing work efficiently",
+            "skills": "WordPress, Drupal, Microsoft Office",
+            "img": "umass"
+        },
+
+        {
+            "header": "Huntington Breast Cancer Action Coalition",
+            "subheader": "Software Engineer Intern | May 2022 - May 2024 | Huntington, NY",
+            "description": "- Front-end project manager of an interactive wellness app<br>- Offered technical and managerial guidance to my development team through weekly leadership meetings  ",
+            "skills": "Flutter, Android Studio, Dart, Java",
+            "img": "huntington"
+        },
+
+        {
+            "header": "Gateway Community Resource Center",
+            "subheader": "Webmaster Intern | Dec 2022 - Aug 2023 | Boonton, NJ",
+            "description": "- Updated, maintained, and contributed towards the development of the resource center’s webpage <br>- Worked with a close-knit group to provide weekly updates, accompanied by deployment plan slideshows",
+            "skills": "WordPress, HTML, CSS, Canva, Microsoft Office",
+            "img": "gateway"
+        },
+
+        {
+            "header": "Code Ninjas",
+            "subheader": "Code Sensei (Instructor) | May 2022 - Aug 2023 | Denville, NJ",
+            "description": "- Provided an encouraging environment through teaching topics such as Unity, JavaScript, Roblox Studios, and Scratch <br>- Led classrooms of 20-30 students during 4-hour summer sessions",
+            "skills": "JS, Leadership, Communication",
+            "img": "codeninjas"
+        }
+    ]
+}
