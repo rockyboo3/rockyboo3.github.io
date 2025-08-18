@@ -372,30 +372,43 @@
                         function openPopup(element_id) {
                             let elt = document.getElementById(element_id);
 
-                            // only open the popup if it isn't already on the screen
                             if (elt.style.display != "block") {
                                 elt.style.display = "block";
-
+                                
                                 // reset position to be middle of screen
                                 elt.style.top = "50%";
                                 elt.style.left = "50%";
 
-                                // shifts new popups from center position dependent on how many 
-                                // popups are currently on the screen
                                 let shift = 50 - elementsOnScreen*6;
                                 elementsOnScreen++;
 
-                                elt.style.transform = `translate(-${shift}%, -${shift}%)`
-                            } else {
-                                // if the popup is already on the screen and another open attempt
-                                // occurs, move it back to the middle of the screen
-                                elt.style.top = "50%";
-                                elt.style.left = "50%";
+                                // Get screen dimensions
+                                const screenWidth = window.innerWidth;
+                                const screenHeight = window.innerHeight;
+                                
+                                // Get element dimensions
+                                const eltWidth = elt.offsetWidth;
+                                const eltHeight = elt.offsetHeight;
+                                
+                                // Calculate maximum allowed positions
+                                const maxLeft = screenWidth - eltWidth;
+                                const maxTop = screenHeight - eltHeight;
+                                
+                                // Calculate new position
+                                let newLeft = (screenWidth/2) - (eltWidth/2) + (elementsOnScreen * 20);
+                                let newTop = (screenHeight/2) - (eltHeight/2) + (elementsOnScreen * 20);
+                                
+                                // Clamp the values within screen bounds
+                                newLeft = Math.max(0, Math.min(newLeft, maxLeft));
+                                newTop = Math.max(0, Math.min(newTop, maxTop));
+                                
+                                // Apply the bounded position
+                                elt.style.transform = 'none';
+                                elt.style.left = newLeft + 'px';
+                                elt.style.top = newTop + 'px';
                             }
 
                             elt.style.zIndex = zIndexPriority++;
-
-                            // ensures z-index of footer will always be greater
                             document.getElementById("footer").style.zIndex = zIndexPriority++;
                         }
 
