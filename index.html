@@ -146,6 +146,10 @@
 
         #footer .clickable a {
             text-decoration: none;
+            display: flex;
+            align-items: center;
+            height: 100%;
+            justify-content: center;
         }
 
         #footer .clickable:hover {
@@ -266,6 +270,7 @@
                 flex-wrap: wrap;
                 justify-content: center;
                 text-align: center;
+                gap: 8px;
             }
 
             #footer .footer_boxes, #footer .clickable, #footer #clickable_wrapper {
@@ -415,33 +420,36 @@
                                 elt.style.top = "50%";
                                 elt.style.left = "50%";
 
-                                let shift = 50 - elementsOnScreen*6;
-                                elementsOnScreen++;
-
-                                // Get screen dimensions
                                 const screenWidth = window.innerWidth;
-                                const screenHeight = window.innerHeight;
-                                
-                                // Get element dimensions
-                                const eltWidth = elt.offsetWidth;
-                                const eltHeight = elt.offsetHeight;
-                                
-                                // Calculate maximum allowed positions
-                                const maxLeft = screenWidth - eltWidth;
-                                const maxTop = screenHeight - eltHeight;
-                                
-                                // Calculate new position
-                                let newLeft = (screenWidth/2) - (eltWidth/2) + (elementsOnScreen * 20);
-                                let newTop = (screenHeight/2) - (eltHeight/2) + (elementsOnScreen * 20);
-                                
-                                // Clamp the values within screen bounds
-                                newLeft = Math.max(0, Math.min(newLeft, maxLeft));
-                                newTop = Math.max(0, Math.min(newTop, maxTop));
-                                
-                                // Apply the bounded position
-                                elt.style.transform = 'none';
-                                elt.style.left = newLeft + 'px';
-                                elt.style.top = newTop + 'px';
+                                if (screenWidth > 500) {
+                                    let shift = 50 - elementsOnScreen*6;
+                                    elementsOnScreen++;
+
+                                    const screenHeight = window.innerHeight;
+                                    
+                                    // Get element dimensions
+                                    const eltWidth = elt.offsetWidth;
+                                    const eltHeight = elt.offsetHeight;
+                                    
+                                    // Calculate maximum allowed positions
+                                    const maxLeft = screenWidth - eltWidth;
+                                    const maxTop = screenHeight - eltHeight;
+                                    
+                                    // Calculate new position
+                                    let newLeft = (screenWidth/2) - (eltWidth/2) + (elementsOnScreen * 20);
+                                    let newTop = (screenHeight/2) - (eltHeight/2) + (elementsOnScreen * 20);
+                                    
+                                    // Clamp the values within screen bounds
+                                    newLeft = Math.max(0, Math.min(newLeft, maxLeft));
+                                    newTop = Math.max(0, Math.min(newTop, maxTop));
+                                    
+                                    // Apply the bounded position
+                                    elt.style.transform = 'none';
+                                    elt.style.left = newLeft + 'px';
+                                    elt.style.top = newTop + 'px';
+                                } else {
+                                    elt.style.top = "44%";
+                                }
                             }
 
                             elt.style.zIndex = zIndexPriority++;
