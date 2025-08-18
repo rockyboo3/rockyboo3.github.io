@@ -2,9 +2,9 @@
     "experiences": [
         {
             "header": "Veolia North America",
-            "subheader": "Junior Drupal Development Intern | May 2025 - Present | Paramus, NJ",
-            "description": "- Incoming SEED intern",
-            "skills": "Drupal, PHP, Git, HTML, CSS, JS",
+            "subheader": "Junior Drupal Developer | August 2025 - Present<br>Junior Drupal Development Intern | May 2025 - August 2025 | Paramus, NJ",
+            "description": "- Full-stack developer of water conservation surveys, leading to return offer<br>- Repaired 30+ links on customer web portal",
+            "skills": "Drupal 10, PHP, Twig, HTML, CSS, JS, Acquia Optimize, Agile",
             "img": "veolia"
         },
         
