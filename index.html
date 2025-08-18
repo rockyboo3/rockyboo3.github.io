@@ -37,13 +37,13 @@
             width: 42px;
         }
 
-        .popup, .popup_no_drag {
+        .popup {
             position: fixed;
             cursor: grab;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 700px;
+            width: min(700px, 80%);
             height: fit-content;
             z-index: 3;
             background-color: #b6b6b6;
@@ -113,7 +113,6 @@
         .info_container .right_content {
             margin: 12px;
             margin-top: 24px;
-            width: 588px;
         }
 
         #footer {
@@ -152,6 +151,12 @@
         #footer .clickable:hover {
             cursor: pointer;
             background-color: #a9a9a9;
+        }
+
+        #footer .clickable_wrapper {
+            display: flex;
+            flex-direction: row;
+            gap: 20px;
         }
 
         #loading_screen {
@@ -254,6 +259,37 @@
         ::-webkit-scrollbar-button:vertical:end:increment {
             background: url('data:image/svg+xml;utf8,<svg fill="black" xmlns="http://www.w3.org/2000/svg" width="6" height="6"><polygon points="0,0 6,0 3,6"/></svg>') no-repeat center;
             background-color: #c0c0c0;
+        }
+
+        @media (max-width: 736px) {
+            #footer {
+                flex-wrap: wrap;
+                justify-content: center;
+                text-align: center;
+            }
+
+            #footer .footer_boxes, #footer .clickable, #footer .clickable_wrapper {
+                width: 100%;
+            }
+
+            #footer .clickable_wrapper {
+                gap: 8px;
+            }
+        }
+
+        @media (max-width: 500px) {
+            .popup_icon {
+                display: none;
+            }
+
+            .popup {
+                width: min(700px, 70%);
+            }
+
+            .popup h1 {
+                font-size: 28px;
+            }
+
         }
     </style>
 </head>
@@ -414,38 +450,58 @@
 
                         // give all popups touch movements
                         let popUpElements = document.querySelectorAll('.popup');
-                        popUpElements.forEach(element => {
-                            const hammer = new Hammer(element);
-                            hammer.get('pan').set({enable: true});
+                        const screenWidth = window.innerWidth;
 
-                            // create new hammer to handle single taps on popups
-                            // (should move popup to the front)
-                            const hammerTap = new Hammer.Manager(element);
-                            hammerTap.add(new Hammer.Tap({ event: 'singletap' }));
-                            hammerTap.on("singletap", function(ev) {
-                                element.style.zIndex = ++zIndexPriority;
-                                document.getElementById("footer").style.zIndex = ++zIndexPriority;
+                        // prevent dragging functionality on smaller screen sizes
+                        if (screenWidth > 500) {
+                            popUpElements.forEach(element => {
+                                const hammer = new Hammer(element);
+                                hammer.get('pan').set({enable: true});
+
+                                // create new hammer to handle single taps on popups
+                                // (should move popup to the front)
+                                const hammerTap = new Hammer.Manager(element);
+                                hammerTap.add(new Hammer.Tap({ event: 'singletap' }));
+                                hammerTap.on("singletap", function(ev) {
+                                    element.style.zIndex = ++zIndexPriority;
+                                    document.getElementById("footer").style.zIndex = ++zIndexPriority;
+                                });
+
+                                let initialX, initialY = 0;
+
+                                hammer.on('panstart', (event) => {
+                                    initialX = element.offsetLeft;
+                                    initialY = element.offsetTop;
+                                });
+
+                                hammer.on('pan', (event) => {
+                                    const deltaX = event.deltaX;
+                                    const deltaY = event.deltaY;
+                                    
+                                    const screenHeight = window.innerHeight;
+                                    
+                                    // Get element dimensions
+                                    const eltWidth = element.offsetWidth;
+                                    const eltHeight = element.offsetHeight;
+                                    
+                                    // Calculate new position
+                                    let newLeft = initialX + deltaX;
+                                    let newTop = initialY + deltaY;
+                                    
+                                    // Clamp the values within screen bounds
+                                    newLeft = Math.max(0, Math.min(newLeft, screenWidth - eltWidth));
+                                    newTop = Math.max(0, Math.min(newTop, screenHeight - eltHeight));
+                                    
+                                    // Apply the bounded position
+                                    element.style.left = newLeft + 'px';
+                                    element.style.top = newTop + 'px';
+
+                                    // move the currently held popup to the top
+                                    element.style.zIndex = zIndexPriority++;
+                                    document.getElementById("footer").style.zIndex = zIndexPriority++;
+                                });
                             });
-
-                            let initialX, initialY = 0;
-
-                            hammer.on('panstart', (event) => {
-                                initialX = element.offsetLeft;
-                                initialY = element.offsetTop;
-                            });
-
-                            hammer.on('pan', (event) => {
-                                const deltaX = event.deltaX;
-                                const deltaY = event.deltaY;
-
-                                element.style.left = initialX + deltaX + 'px';
-                                element.style.top = initialY + deltaY + 'px';
-
-                                // move the currently held popup to the top
-                                element.style.zIndex = zIndexPriority++;
-                                document.getElementById("footer").style.zIndex = zIndexPriority++;
-                            });
-                        });
+                        }
 
                         // closing functionality
                         let closeElements = document.querySelectorAll('.x_button_wrapper');
@@ -484,9 +540,7 @@
             }
             
             async function confirmLoad() {
-                await loadDoc();
-                //document.getElementById("loading_screen").style.display = "none";
-                
+                await loadDoc();                
                 setTimeout(() => {
                     document.getElementById("loading_screen").style.display = "none";
                 }, 2000);
@@ -501,10 +555,16 @@
         <div class="footer_boxes">
             Made by &copy; Caitlyn Parrish-Lewis 2025
         </div>
-        <div style="display: flex; flex-direction: row; gap: 8px;">
+        <div id="clickable_wrapper">
             <div class="clickable">
                 <a target="_blank" href="https://drive.google.com/file/d/171jpuIYqxPpi0i616jjlFAZmeLuCoZ7P/view?usp=sharing">
-                    Download Resume
+                    View Resume
+                </a>
+            </div>
+            <div class="clickable">
+                <!-- @todo Add link -->
+                <a target="_blank" href="">
+                    View Projects PDF
                 </a>
             </div>
             <div class="clickable">
