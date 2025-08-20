@@ -2,7 +2,7 @@
 <html>
 <head>
     <!-- <title>Caitlyn Parrish-Lewis | Portfolio</title> -->
-    <meta name='viewport' content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
     <link href="https://fonts.cdnfonts.com/css/px-sans-nouveaux" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Serif+Text:ital@0;1&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <link rel="icon" type="image/x-icon" href="images/star.ico">
@@ -232,6 +232,7 @@
             border-right: 2px solid #404040;
             border-bottom: 2px solid #404040;
             margin-left: 6px;
+            display: inline-block;
         }
 
         /* CUSTOM SCROLLBAR */
@@ -289,10 +290,15 @@
 
             .popup {
                 width: min(700px, 70%);
+                pointer-events: none; /* disable pointer events to prevent dragging */;
             }
 
             .popup h1 {
                 font-size: 28px;
+            }
+
+            .info_container {
+                margin: 10px;
             }
 
         }
@@ -451,10 +457,8 @@
                                     newLeft = Math.max(0, Math.min(newLeft, maxLeft));
                                     newTop = Math.max(0, Math.min(newTop, maxTop));
                                     
-                                    // Apply the bounded position
-                                    elt.style.transform = 'none';
-                                    elt.style.left = newLeft + 'px';
-                                    elt.style.top = newTop + 'px';
+                                    // Apply the bounded position using transform
+                                    elt.style.transform = `translate(${newLeft - elt.offsetLeft}px, ${newTop - elt.offsetTop}px)`;
                                 } else {
                                     elt.style.top = "44%";
                                 }
@@ -466,58 +470,54 @@
 
                         // give all popups touch movements
                         let popUpElements = document.querySelectorAll('.popup');
-                        const screenWidth = window.innerWidth;
+                        popUpElements.forEach(element => {
+                            const hammer = new Hammer(element);
+                            hammer.get('pan').set({enable: true});
 
-                        // prevent dragging functionality on smaller screen sizes
-                        if (screenWidth > 500) {
-                            popUpElements.forEach(element => {
-                                const hammer = new Hammer(element);
-                                hammer.get('pan').set({enable: true});
-
-                                // create new hammer to handle single taps on popups
-                                // (should move popup to the front)
-                                const hammerTap = new Hammer.Manager(element);
-                                hammerTap.add(new Hammer.Tap({ event: 'singletap' }));
-                                hammerTap.on("singletap", function(ev) {
-                                    element.style.zIndex = ++zIndexPriority;
-                                    document.getElementById("footer").style.zIndex = ++zIndexPriority;
-                                });
-
-                                let initialX, initialY = 0;
-
-                                hammer.on('panstart', (event) => {
-                                    initialX = element.offsetLeft;
-                                    initialY = element.offsetTop;
-                                });
-
-                                hammer.on('pan', (event) => {
-                                    const deltaX = event.deltaX;
-                                    const deltaY = event.deltaY;
-                                    
-                                    const screenHeight = window.innerHeight;
-                                    
-                                    // Get element dimensions
-                                    const eltWidth = element.offsetWidth;
-                                    const eltHeight = element.offsetHeight;
-                                    
-                                    // Calculate new position
-                                    let newLeft = initialX + deltaX;
-                                    let newTop = initialY + deltaY;
-                                    
-                                    // Clamp the values within screen bounds
-                                    newLeft = Math.max(0, Math.min(newLeft, screenWidth - eltWidth));
-                                    newTop = Math.max(0, Math.min(newTop, screenHeight - eltHeight));
-                                    
-                                    // Apply the bounded position
-                                    element.style.left = newLeft + 'px';
-                                    element.style.top = newTop + 'px';
-
-                                    // move the currently held popup to the top
-                                    element.style.zIndex = zIndexPriority++;
-                                    document.getElementById("footer").style.zIndex = zIndexPriority++;
-                                });
+                            // create new hammer to handle single taps on popups
+                            // (should move popup to the front)
+                            const hammerTap = new Hammer.Manager(element);
+                            hammerTap.add(new Hammer.Tap({ event: 'singletap' }));
+                            hammerTap.on("singletap", function(ev) {
+                                element.style.zIndex = ++zIndexPriority;
+                                document.getElementById("footer").style.zIndex = ++zIndexPriority;
                             });
-                        }
+
+                            let currentX = 0;
+                            let currentY = 0;
+
+                            hammer.on('panstart', (event) => {
+                                const transform = window.getComputedStyle(element).transform;
+                                const matrix = new DOMMatrix(transform); // convert matrix string to obj
+                                currentX = matrix.m41; // how far elt has moved horizontally
+                                currentY = matrix.m42; // how far elt has moved vertically
+                            });
+
+                            hammer.on('pan', (event) => {
+                                const deltaX = event.deltaX;
+                                const deltaY = event.deltaY;
+                                const screenWidth = window.innerWidth;
+                                const screenHeight = window.innerHeight;
+                                const elementWidth = element.offsetWidth;
+                                const elementHeight = element.offsetHeight;
+
+                                // Calculate new position with bounds
+                                const newX = Math.max(
+                                    -element.offsetLeft,
+                                    Math.min(currentX + deltaX, screenWidth - elementWidth - element.offsetLeft)
+                                );
+                                const newY = Math.max(
+                                    -element.offsetTop,
+                                    Math.min(currentY + deltaY, screenHeight - elementHeight - element.offsetTop)
+                                );
+
+                                element.style.transform = `translate(${newX}px, ${newY}px)`;
+
+                                // move the currently held popup to the top
+                                element.style.zIndex = zIndexPriority++;
+                                document.getElementById("footer").style.zIndex = zIndexPriority++;
+                            });
+                        });
 
                         // closing functionality
                         let closeElements = document.querySelectorAll('.x_button_wrapper');
