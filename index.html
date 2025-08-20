@@ -401,12 +401,20 @@
 
                             // give each desktop icon double tap touch movement ->
                             // double tapping a desktop icon will open the corresponding popup
-                            var hammer = new Hammer.Manager(iconDiv);
-                            hammer.add(new Hammer.Tap({ event: 'doubletap', taps: 2 }));
-                            hammer.on("doubletap", function(ev) {
-                                // pass icon_names[index] because it is equal to the popup's ids
-                                openPopup(icon_names[index]);
-                            });
+                            const screenWidth = window.innerWidth;
+                            if (screenWidth > 500) {
+                                var hammer = new Hammer.Manager(iconDiv);
+                                hammer.add(new Hammer.Tap({ event: 'doubletap', taps: 2 }));
+                                hammer.on("doubletap", function(ev) {
+                                    // pass icon_names[index] because it is equal to the popup's ids
+                                    openPopup(icon_names[index]);
+                                });
+                            } else {
+                                iconDiv.addEventListener("click", () => {
+                                    // pass icon_names[index] because it is equal to the popup's ids
+                                    openPopup(icon_names[index]);
+                                });
+                            }
                         });
 
                         // OPEN A NEW POPUP
