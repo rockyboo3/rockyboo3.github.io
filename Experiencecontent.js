@@ -1,5 +1,5 @@
 // fetch information for experiences
-$.get("https://rockyboo3.github.io/portfolio/experiences_info.json", (data) => {
+$.get("/experiences_info.json", (data) => {
     // loop through each experience's data
     data["experiences"].forEach(experience => {
         $('#Experiencecontent').append(
