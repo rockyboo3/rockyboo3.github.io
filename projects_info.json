@@ -1,0 +1,87 @@
+{
+    "projects": [
+        {
+            "header": "This Portfolio!",
+            "subheader": "April 2025 - Present",
+            "description": "- Inspired by Windows 95, my personal portfolio puts a creative spin on a classic design<br>- Built with HTML, CSS, JS, and fetch API, it features interactive popups and a retro aesthetic",
+            "project_link": "https://github.com/rockyboo3/rockyboo3.github.io"
+        },
+        
+        {
+            "header": "Veolia Water Conservation Surveys",
+            "subheader": "May - August 2025",
+            "description": "- Basic and advanced water conservation surveys designed for Veolia customers to better understand their water usage at home, furthering Veolia's mission of sustainability<br>- Built with Drupal 10, PHP, Twig, HTML, CSS, JS, the surveys are currently in production and actively used by thousands of customers<br>- Led to a part-time return offer from Veolia following the conclusion of my summer  internship",
+            "project_link": "https://mywater.veolia.us/basic-conservation-survey"
+        },
+
+        {
+            "header": "Shaggy",
+            "subheader": "April 2025",
+            "description": "- Pet adoption webapp with the purpose of simplifying the pet adoption process<br>- Inspired bby the ease of a Tinder-like swiping interface<br>- Built with HTML, CSS, JS, PHP, MySQL, Google Auth (with Firebase), and the Petfinder API to help users find their perfect pet match",
+            "project_link": "https://mywater.veolia.us/basic-conservation-survey"
+        },
+
+        {
+            "header": "Greenify Boston",
+            "subheader": "February - March 2025",
+            "description": "- Website for non-profit organization focused on initiatives and events to make Boston greener<br>- Responsible for the design and code of the fixed elements (navigation bar and footer), homepage, contact page, and volunteer form page<br>- Built using HTML, CSS, JS, and jQuery",
+            "project_link": "https://rockyboo3.github.io/greenify_boston/"
+        },
+
+        {
+            "header": "More Trees",
+            "subheader": "February 2025",
+            "description": "- Website for non-profit organization focused on planting trees around the globe<br>- Responsible for the entirety of the design and implementation of the website<br>- Built with HTML, CSS, and JS",
+            "project_link": "https://rockyboo3.github.io/tempcs20/moretrees/"
+        },
+
+        {
+            "header": "Huntington Breast Cancer Action Coalition Wellness App",
+            "subheader": "May 2022 - May 2024",
+            "description": "- Wellness app made for HBCAC that allows users to create and track healthy habits in a fun, interactive way<br>- Responsible for leading the front-end development<br>- Built with Android Studio (Java), Dart, and Flutter",
+            "project_link": "N/A"
+        },
+
+        {
+            "header": "Defuse!",
+            "subheader": "April - May 2024",
+            "description": "- Physical adaptation of the game 'Keep Talking and Nobody Explodes'<br>- Arduino + associated hardware and 3D printing",
+            "project_link": "https://sites.google.com/view/defusecs256"
+        },
+
+        {
+            "header": "Scurry",
+            "subheader": "February - April 2023",
+            "description": "- Learning management system that helps students stay productive in the classroom in a fun, interactive way<br>- Includes both an admin/teacher and a student website<br>- <strong>Received 1st in NJ for TSA's 2023 Software Development Competition, qualifying for the national competition</strong><br>- Built with HTML, CSS, JS, and Firebase for authentication and realtime database",
+            "project_link": "N/A"
+        },
+
+        {
+            "header": "Morris County School of Technology Bus Application",
+            "subheader": "October 2021 - June 2023",
+            "description": "- Application to help direct students to their bus<br>- Created with the purpose of saving paper and making dismissal more efficient in my high school<br>- In active use, used by hundreds of students every year<br>- HTML, CSS, JS, and Firebase for realtime database",
+            "project_link": "N/A"
+        },
+
+        {
+            "header": "Community Connect",
+            "subheader": "March - May 2023",
+            "description": "- Designed to bring communities together through service<br>- <strong>Won 'Best Design' and 'Best in Show' for CCM's Mobile App Design Showcase</strong><br>- Built with Android Studio (Java) and Firebase for authentication and realtime database",
+            "project_link": "N/A"
+        },
+
+        {
+            "header": "Artificial Intelligence Sign Language (AISL)",
+            "subheader": "April 2022",
+            "description": "- Works to bridge the communication gap between ASL users and non-ASL users through AI recognition<br>- <strong>Received 2nd place at hackMCST VII (2022) in Denville, NJ</strong><br>- Built with HTML, CSS, JS, and TensorFlow.js",
+            "project_link": "N/A"
+        },
+
+        {
+            "header": "Peech Assistant",
+            "subheader": "October - November 2021",
+            "description": "Designed to help people who have communication difficulties effectively engage with their peers<br>- Allows users to create cards that can be pressed to form written and spoken sentences<br>- HTML, CSS, and JS",
+            "project_link": "N/A"
+        }
+    ]
+}

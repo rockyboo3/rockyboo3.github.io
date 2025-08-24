@@ -365,6 +365,10 @@
                                 let script = document.createElement('script');
                                 script.src = 'Experiencecontent.js';
                                 this.appendChild(script);
+                            } else if (this.id.replace(/[^A-Z0-9]/ig, '') == "Projectscontent") {
+                                let script = document.createElement('script');
+                                script.src = 'Projectscontent.js';
+                                this.appendChild(script);
                             } else {
                                 // convert the id to the associated filename (no special characters)
                                 fetch(this.id.replace(/[^A-Z0-9]/ig, '') + ".html")
@@ -526,6 +530,44 @@
                                 element.parentElement.parentElement.style.display = 'none';
                                 elementsOnScreen--;
                             });
+                        });
+
+                        // Handle window resize
+                        window.addEventListener('resize', () => {
+                            const screenWidth = window.innerWidth;
+                            const popups = document.querySelectorAll('.popup');
+                            
+                            popups.forEach(popup => {
+                                if (popup.style.display === 'block') {
+                                    if (screenWidth <= 500) {
+                                        // Reset transform and use fixed positioning for mobile
+                                        popup.style.transform = 'translate(-50%, -50%)';
+                                        popup.style.top = '44%';
+                                        popup.style.left = '50%';
+                                    } else {
+                                        // Keep desktop position but ensure it's within bounds
+                                        const elementWidth = popup.offsetWidth;
+                                        const elementHeight = popup.offsetHeight;
+                                        const screenHeight = window.innerHeight;
+                                        
+                                        // Calculate maximum allowed positions
+                                        const maxLeft = screenWidth - elementWidth;
+                                        const maxTop = screenHeight - elementHeight;
+                                        
+                                        // Get current position
+                                        const rect = popup.getBoundingClientRect();
+                                        const currentLeft = rect.left;
+                                        const currentTop = rect.top;
+                                        
+                                        // Clamp to new bounds
+                                        const newLeft = Math.max(0, Math.min(currentLeft, maxLeft));
+                                        const newTop = Math.max(0, Math.min(currentTop, maxTop));
+                                        
+                                        popup.style.transform = `translate(${newLeft - popup.offsetLeft}px, ${newTop - popup.offsetTop}px)`;
+                                    }
+                                }
+                            });
+                            document.getElementById("footer").style.zIndex = ++zIndexPriority;
                         });
 
                         // resolve after all async and DOM setup
