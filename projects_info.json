@@ -18,7 +18,7 @@
             "header": "Shaggy",
             "subheader": "April 2025",
             "description": "- Pet adoption webapp with the purpose of simplifying the pet adoption process<br>- Inspired bby the ease of a Tinder-like swiping interface<br>- Built with HTML, CSS, JS, PHP, MySQL, Google Auth (with Firebase), and the Petfinder API to help users find their perfect pet match",
-            "project_link": "https://mywater.veolia.us/basic-conservation-survey"
+            "project_link": "https://caitlynp.sgedu.site/shaggy/"
         },
 
         {
@@ -73,7 +73,7 @@
         {
             "header": "Artificial Intelligence Sign Language (AISL)",
             "subheader": "April 2022",
-            "description": "- Works to bridge the communication gap between ASL users and non-ASL users through AI recognition<br>- <strong>Received 2nd place at hackMCST VII (2022) in Denville, NJ</strong><br>- Built with HTML, CSS, JS, and TensorFlow.js",
+            "description": "- Works to bridge the communication gap between ASL users and non-ASL users through AI recognition<br>- <strong>Received 2nd place at hackMCST VII (2022) in Denville, NJ</strong><br>- Built with HTML, CSS, JS, and TensorFlow",
             "project_link": "N/A"
         },
 

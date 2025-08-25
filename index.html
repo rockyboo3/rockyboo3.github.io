@@ -222,7 +222,7 @@
             color: black;
         }
 
-        #email_link::after {
+        #email_link::after, .projects_buttons {
             content: "CLICK TO COPY";
             padding: 2px;
             color: black;
@@ -233,6 +233,8 @@
             border-bottom: 2px solid #404040;
             margin-left: 6px;
             display: inline-block;
+            text-decoration: none;
+            cursor: pointer;
         }
 
         /* CUSTOM SCROLLBAR */
@@ -290,7 +292,7 @@
 
             .popup {
                 width: min(700px, 70%);
-                pointer-events: none; /* disable pointer events to prevent dragging */;
+                /* pointer-events: none; */
             }
 
             .popup h1 {
@@ -331,7 +333,7 @@
         $(document).ready(() => {
             function loadDoc() {
                 return new Promise((resolve, reject) => {
-                    // get the json object from a NON-LOCAL url
+                    // get the json object
                     $.get("/popup_info.json", (data) => {
                         // loop through each popup's data
                         data["popups"].forEach(popup => {
@@ -474,12 +476,11 @@
 
                         // give all popups touch movements
                         let popUpElements = document.querySelectorAll('.popup');
-                        popUpElements.forEach(element => {
-                            const hammer = new Hammer(element);
-                            hammer.get('pan').set({enable: true});
-
-                            // create new hammer to handle single taps on popups
-                            // (should move popup to the front)
+                        // Store hammer instances as key,value for cleanup
+                        const hammerInstances = new Map();
+                        
+                        function initPopupHammer(element) {
+                            // Always create tap functionality regardless of screen size
                             const hammerTap = new Hammer.Manager(element);
                             hammerTap.add(new Hammer.Tap({ event: 'singletap' }));
                             hammerTap.on("singletap", function(ev) {
@@ -487,43 +488,63 @@
                                 document.getElementById("footer").style.zIndex = ++zIndexPriority;
                             });
 
-                            let currentX = 0;
-                            let currentY = 0;
+                            const screenWidth = window.innerWidth;
+                            if (screenWidth > 500) {
+                                // Only create pan functionality for larger screen sizes
+                                const hammer = new Hammer(element);
+                                hammer.get('pan').set({enable: true});
+                                element.style.cursor = 'grab';
+                                
+                                // Store both instances for later cleanup
+                                hammerInstances.set(element, { hammer, hammerTap });
+                                return { hammer, hammerTap };
+                            } else {
+                                element.style.cursor = 'default';
+                                // Store only tap instance for smaller screen sizes
+                                hammerInstances.set(element, { hammerTap });
+                                return { hammerTap };
+                            }
+                        }
 
-                            hammer.on('panstart', (event) => {
-                                const transform = window.getComputedStyle(element).transform;
-                                const matrix = new DOMMatrix(transform); // convert matrix string to obj
-                                currentX = matrix.m41; // how far elt has moved horizontally
-                                currentY = matrix.m42; // how far elt has moved vertically
-                            });
+                        popUpElements.forEach(element => {
+                            const instances = initPopupHammer(element);
+                            // Set up pan events if hammer instance (from larger screen size) exists
+                            if (instances && instances.hammer) {
+                                let currentX = 0;
+                                let currentY = 0;
 
-                            hammer.on('pan', (event) => {
-                                const deltaX = event.deltaX;
-                                const deltaY = event.deltaY;
-                                const screenWidth = window.innerWidth;
-                                const screenHeight = window.innerHeight;
-                                const elementWidth = element.offsetWidth;
-                                const elementHeight = element.offsetHeight;
+                                instances.hammer.on('panstart', (event) => {
+                                    const transform = window.getComputedStyle(element).transform;
+                                    const matrix = new DOMMatrix(transform);
+                                    currentX = matrix.m41;
+                                    currentY = matrix.m42;
+                                });
 
-                                // Calculate new position with bounds
-                                const newX = Math.max(
-                                    -element.offsetLeft,
-                                    Math.min(currentX + deltaX, screenWidth - elementWidth - element.offsetLeft)
-                                );
-                                const newY = Math.max(
-                                    -element.offsetTop,
-                                    Math.min(currentY + deltaY, screenHeight - elementHeight - element.offsetTop)
-                                );
+                                instances.hammer.on('pan', (event) => {
+                                    const deltaX = event.deltaX;
+                                    const deltaY = event.deltaY;
+                                    const screenWidth = window.innerWidth;
+                                    const screenHeight = window.innerHeight;
+                                    const elementWidth = element.offsetWidth;
+                                    const elementHeight = element.offsetHeight;
 
-                                element.style.transform = `translate(${newX}px, ${newY}px)`;
+                                    const newX = Math.max(
+                                        -element.offsetLeft,
+                                        Math.min(currentX + deltaX, screenWidth - elementWidth - element.offsetLeft)
+                                    );
+                                    const newY = Math.max(
+                                        -element.offsetTop,
+                                        Math.min(currentY + deltaY, screenHeight - elementHeight - element.offsetTop)
+                                    );
 
-                                // move the currently held popup to the top
-                                element.style.zIndex = zIndexPriority++;
-                                document.getElementById("footer").style.zIndex = zIndexPriority++;
-                            });
+                                    element.style.transform = `translate(${newX}px, ${newY}px)`;
+                                    element.style.zIndex = zIndexPriority++;
+                                    document.getElementById("footer").style.zIndex = zIndexPriority++;
+                                });
+                            }
                         });
 
-                        // closing functionality
+                        // Closing functionality
                         let closeElements = document.querySelectorAll('.x_button_wrapper');
                         closeElements.forEach(element => {
                             element.addEventListener("click", () => {
@@ -538,12 +559,23 @@
                             const popups = document.querySelectorAll('.popup');
                             
                             popups.forEach(popup => {
+                                // Delete hammer instances on window resize to avoid conflicting rules with screen size changes
+                                if (hammerInstances.has(popup)) {
+                                    const instances = hammerInstances.get(popup);
+                                    instances.hammerTap.destroy();
+                                    if (instances.hammer) {
+                                        instances.hammer.destroy();
+                                    }
+                                    hammerInstances.delete(popup);
+                                }
+
                                 if (popup.style.display === 'block') {
                                     if (screenWidth <= 500) {
                                         // Reset transform and use fixed positioning for mobile
                                         popup.style.transform = 'translate(-50%, -50%)';
                                         popup.style.top = '44%';
                                         popup.style.left = '50%';
+                                        popup.style.cursor = 'default';
                                     } else {
                                         // Keep desktop position but ensure it's within bounds
                                         const elementWidth = popup.offsetWidth;
@@ -564,7 +596,44 @@
                                         const newTop = Math.max(0, Math.min(currentTop, maxTop));
                                         
                                         popup.style.transform = `translate(${newLeft - popup.offsetLeft}px, ${newTop - popup.offsetTop}px)`;
+                                        popup.style.cursor = 'grab';
                                     }
+                                }
+                                
+                                // Always try to initialize Hammer, recreate single tap functionality
+                                const instances = initPopupHammer(popup);
+                                if (instances && instances.hammer && popup.style.display === 'block') {
+                                    // Set up pan events for the new instance if applicable
+                                    let currentX = 0;
+                                    let currentY = 0;
+
+                                    instances.hammer.on('panstart', (event) => {
+                                        const transform = window.getComputedStyle(popup).transform;
+                                        const matrix = new DOMMatrix(transform);
+                                        currentX = matrix.m41;
+                                        currentY = matrix.m42;
+                                    });
+
+                                    instances.hammer.on('pan', (event) => {
+                                        const deltaX = event.deltaX;
+                                        const deltaY = event.deltaY;
+                                        const screenHeight = window.innerHeight;
+                                        const elementWidth = popup.offsetWidth;
+                                        const elementHeight = popup.offsetHeight;
+
+                                        const newX = Math.max(
+                                            -popup.offsetLeft,
+                                            Math.min(currentX + deltaX, screenWidth - elementWidth - popup.offsetLeft)
+                                        );
+                                        const newY = Math.max(
+                                            -popup.offsetTop,
+                                            Math.min(currentY + deltaY, screenHeight - elementHeight - popup.offsetTop)
+                                        );
+
+                                        popup.style.transform = `translate(${newX}px, ${newY}px)`;
+                                        popup.style.zIndex = zIndexPriority++;
+                                        document.getElementById("footer").style.zIndex = zIndexPriority++;
+                                    });
                                 }
                             });
                             document.getElementById("footer").style.zIndex = ++zIndexPriority;
