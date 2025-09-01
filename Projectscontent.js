@@ -10,7 +10,7 @@ $.get("/projects_info.json", (data) => {
                         project["description"] + '<br>' +
                         (project["project_link"] !== "N/A" ? 
                             '<a class="projects_buttons" target="_blank" href="' + project["project_link"] + '">PROJECT LINK</a>' : 
-                            '') + '<p id="' + project["header"] + '" class="projects_buttons gallery_link">GALLERY</p>' + '<br><br>'
+                            '') + '<br><br>'
         );
     });
 });
