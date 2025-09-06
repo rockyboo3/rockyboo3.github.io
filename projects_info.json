@@ -17,7 +17,7 @@
         {
             "header": "Shaggy",
             "subheader": "April 2025",
-            "description": "- Pet adoption webapp with the purpose of simplifying the pet adoption process<br>- Inspired bby the ease of a Tinder-like swiping interface<br>- Built with HTML, CSS, JS, PHP, MySQL, Google Auth (with Firebase), and the Petfinder API to help users find their perfect pet match",
+            "description": "- Pet adoption webapp with the purpose of simplifying the pet adoption process<br>- Inspired by the ease of a Tinder-like swiping interface<br>- Built with HTML, CSS, JS, PHP, MySQL, Google Auth (with Firebase), Figma, and the Petfinder API to help users find their perfect pet match",
             "project_link": "https://caitlynp.sgedu.site/shaggy/"
         },
 
