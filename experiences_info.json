@@ -1,9 +1,17 @@
 {
     "experiences": [
         {
+            "header": "AIG",
+            "subheader": "Technical Architect | June 2026 - Present | Jersey City, NJ",
+            "description": "- Owned and conducted a proof of value for new pipeline security tools within AIG’s existing ecosystem, creating documentation and reports for the CIO<br>- Contributed to proof of value of Gen AI tools by prompt-engineering for a manual process, saving 5+ hours daily",
+            "skills": "AWS (EC2, S3, Lambda), Product Management, Microsoft Office, Microsoft Visio, Confluence, Gen AI Prompt Engineering",
+            "img": "aig"
+        },
+
+        {
             "header": "Veolia North America",
-            "subheader": "Junior Drupal Developer | August 2025 - Present<br>Junior Drupal Development Intern | May 2025 - August 2025 | Paramus, NJ",
-            "description": "- Full-stack developer of water conservation surveys, leading to return offer<br>- Repaired 30+ links on customer web portal<br>- Implemented features and bug fixes to restore a previous production downtime of 3+ months",
+            "subheader": "Drupal Developer | August 2025 - May 2026<br>Junior Drupal Development Intern | May 2025 - August 2025 | Paramus, NJ",
+            "description": "- Full-stack development of conservation features (water usage surveys, green profile, and conservation goal) in Drupal 10 on Veolia customer portal, restoring content from a 3+ month downtime and leading to return offer<br>- Identified and repaired critical vulnerability issues and 30+ broken links; continuous bug fixes",
             "skills": "Drupal 10, PHP, Twig, HTML, CSS, JS, Jira, Acquia Optimize, Agile Framework",
             "img": "veolia"
         },
